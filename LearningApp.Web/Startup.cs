@@ -1,0 +1,58 @@
+﻿using LearningApp.Web.Extensions;
+
+namespace LearningApp.Web
+{
+    public class Startup
+    {
+        public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllers();
+            services.AddSwaggerGen();
+
+            // add service for db connection
+
+
+
+            services.AddCors();
+            services.AddServicesConfig();
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LearningApp.Web v1"));
+            }
+
+            app.UseRouting();
+
+            // Setup Cors here
+            /*app.UseCors(x => x
+                .WithOrigins("http://0.0.0.0:80",
+                "http://3.109.132.170:80",
+                "http://192.168.1.6",
+                "http://localhost:80")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());*/
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+
+
+        }
+
+    }
+}
