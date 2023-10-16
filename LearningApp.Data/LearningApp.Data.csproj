@@ -10,4 +10,11 @@
     <ProjectReference Include="..\LearningApp.Application\LearningApp.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entities\" />
+    <Folder Include="IRepositories\" />
+    <Folder Include="Seeders\" />
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
 </Project>
