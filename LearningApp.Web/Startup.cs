@@ -22,7 +22,6 @@ namespace LearningApp.Web
             services.AddDbContext<EFDataContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ConnectionStringMssql")));
 
-
             services.AddCors();
             services.AddServicesConfig();
         }
@@ -48,6 +47,9 @@ namespace LearningApp.Web
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());*/
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
