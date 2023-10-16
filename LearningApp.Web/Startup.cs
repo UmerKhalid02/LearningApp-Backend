@@ -1,4 +1,6 @@
-﻿using LearningApp.Web.Extensions;
+﻿using LearningApp.Data;
+using LearningApp.Web.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace LearningApp.Web
 {
@@ -17,7 +19,8 @@ namespace LearningApp.Web
             services.AddSwaggerGen();
 
             // add service for db connection
-
+            services.AddDbContext<EFDataContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("ConnectionStringMssql")));
 
 
             services.AddCors();

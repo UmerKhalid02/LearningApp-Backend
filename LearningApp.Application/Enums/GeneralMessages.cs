@@ -1,8 +1,7 @@
 ﻿namespace LearningApp.Application.Enums
 {
-    public sealed class GeneralMessages
+    public static class GeneralMessages
     {
-        private GeneralMessages() { }
         public const string RecordAdded = "Record has been added successfully";
         public const string RecordNotAdded = "Record not added successfully";
         public const string RecordUpdated = "Record has been updated successfully";
