@@ -1,5 +1,7 @@
-﻿using LearningApp.Data;
+﻿using LearningApp.Application;
+using LearningApp.Data;
 using LearningApp.Web.Extensions;
+using LearningApp.Web.Middlewares;
 using Microsoft.EntityFrameworkCore;
 
 namespace LearningApp.Web
@@ -15,6 +17,7 @@ namespace LearningApp.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddApplicationLayer();
             services.AddControllers();
             services.AddSwaggerGen();
 
@@ -38,7 +41,7 @@ namespace LearningApp.Web
 
             app.UseRouting();
 
-            // Setup Cors here
+            // -- Setup Cors here 
             /*app.UseCors(x => x
                 .WithOrigins("http://0.0.0.0:80",
                 "http://3.109.132.170:80",
@@ -48,6 +51,7 @@ namespace LearningApp.Web
                 .AllowAnyHeader()
                 .AllowCredentials());*/
 
+            app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -55,7 +59,6 @@ namespace LearningApp.Web
             {
                 endpoints.MapControllers();
             });
-
 
         }
 

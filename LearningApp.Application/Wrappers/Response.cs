@@ -11,13 +11,13 @@ namespace LearningApp.Application.Wrappers
 
         public Response(T data, string message = "")
         {
-            Message = message;
-            PayLoad = data;
+            this.Message = message;
+            this.PayLoad = data;
         }
 
         public Response(bool success, T data, string message, List<ErrorModel> errors)
         {
-            Success = success;
+            this.Success = success;
             this.Message = message;
             this.PayLoad = data;
             this.Errors = errors;
@@ -25,7 +25,7 @@ namespace LearningApp.Application.Wrappers
 
         public Response(bool success, T data, string message)
         {
-            Success = success;
+            this.Success = success;
             this.Message = message;
             this.PayLoad = data;
             this.Errors = null;
