@@ -1,4 +1,5 @@
 ﻿using LearningApp.Data.Entities.AuthenticationEntity;
+using LearningApp.Data.Entities.ProblemEntity;
 using LearningApp.Data.Entities.UserEntity;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +12,8 @@ namespace LearningApp.Data
         public DbSet<User> Users { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Role> Roles { get; set; }
-
+        public DbSet<Problem> Problems { get; set; }
+        public DbSet<Topic> Topics { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("edu");
