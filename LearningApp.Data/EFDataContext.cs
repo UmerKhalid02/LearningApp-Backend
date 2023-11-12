@@ -14,6 +14,8 @@ namespace LearningApp.Data
         public DbSet<Role> Roles { get; set; }
         public DbSet<Problem> Problems { get; set; }
         public DbSet<Topic> Topics { get; set; }
+        public DbSet<Choice> Choices { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("edu");

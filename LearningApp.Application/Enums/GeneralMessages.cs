@@ -13,6 +13,8 @@
         public const string RecordNotFetched = "Record not fetched successfully";
         public const string RecordNotFound = "Record not found";
 
+        public const string InvalidTopicId = "Invalid TopicID";
+        public const string InvalidProblemId = "Invalid ProblemID";
 
     }
 }
