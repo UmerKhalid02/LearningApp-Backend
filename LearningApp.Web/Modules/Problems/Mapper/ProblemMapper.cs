@@ -29,7 +29,7 @@ namespace LearningApp.Web.Modules.Problems.Mapper
             CreateMap<Choice, ChoiceRequestDTO>().ReverseMap();
 
             CreateMap<AddProblemRequestDTO, Problem>()
-                .ForPath(dest => dest.Choices, opt => opt.MapFrom(src => src.Choices))
+                .ForMember(dest => dest.Choices, opt => opt.MapFrom(src => src.Choices))
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToUpper()))
                 .ReverseMap();
         }
@@ -39,9 +39,10 @@ namespace LearningApp.Web.Modules.Problems.Mapper
             CreateMap<Choice, UpdateChoiceRequestDTO>().ReverseMap();
 
             CreateMap<UpdateProblemRequestDTO, Problem>()
-                .ForPath(dest => dest.Choices, opt => opt.MapFrom(src => src.Choices))
+                .ForMember(dest => dest.Choices, opt => opt.MapFrom(src => src.Choices))
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToUpper()))
-                .ReverseMap();
+                .ReverseMap()
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember, destMember) => srcMember != null));
         }
 
     }

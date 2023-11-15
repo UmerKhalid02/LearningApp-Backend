@@ -40,5 +40,12 @@ namespace LearningApp.Web.Modules.Problems
             var response = await _problemService.UpdateProblem(problemId, problemDto);
             return Ok(response);
         }
+
+        [HttpDelete("{problemId}")]
+        public async Task<IActionResult> DeleteProblem(Guid problemId)
+        {
+            var response = await _problemService.DeleteProblem(problemId);
+            return Ok(response);
+        }
     }
 }

@@ -10,8 +10,29 @@ namespace LearningApp.Web.Modules.Problems
 {
     public class ProblemService : IProblemService
     {
+        #region Private Methods
+
         private readonly IProblemRepository _problemRepository;
         private readonly IMapper _mapper;
+        private bool DistinctChoicesKeys(List<UpdateChoiceRequestDTO> choiceDTO)
+        {
+            var distinct = choiceDTO.Select(c => c.ChoiceId).Distinct().Count() == choiceDTO.Count();
+            return distinct;
+        }
+        private void RemoveChoicesFromProblem(Problem problem)
+        {
+            foreach (var choice in problem.Choices)
+            {
+                choice.IsActive = false;
+                choice.UpdatedAt = DateTime.UtcNow;
+                choice.DeletedAt = DateTime.UtcNow;
+            }
+        }
+
+        #endregion
+
+
+        #region Public Methods
         public ProblemService(IProblemRepository problemRepository, IMapper mapper)
         {
             _problemRepository = problemRepository;
@@ -60,7 +81,6 @@ namespace LearningApp.Web.Modules.Problems
 
             // map dto to entity
             var problem = _mapper.Map<Problem>(problemDto);
-            problem.Type = problemDto.Type.ToUpper();
             problem.IsActive = true;
             problem.CreatedAt = DateTime.UtcNow;
 
@@ -86,20 +106,9 @@ namespace LearningApp.Web.Modules.Problems
             return new Response<ProblemResponseDTO>(true, null, GeneralMessages.RecordAdded);
         }
 
-        private bool DistinctChoicesKeys(List<UpdateChoiceRequestDTO> choiceDTO)
-        {
-            var distinct = choiceDTO.Select(c => c.ChoiceId).Distinct().Count() == choiceDTO.Count();
-            return distinct;
-        }
-        private void RemoveChoicesFromProblem(Problem problem)
-        {
-            foreach (var choice in problem.Choices)
-            {
-                choice.IsActive = false;
-                choice.UpdatedAt = DateTime.UtcNow;
-                choice.DeletedAt = DateTime.UtcNow;
-            }
-        }
+        // TODO: check if problem type is other than mcq/tf, then choices must not be provided
+        // TODO: mapping is creating problems
+
         public async Task<Response<ProblemResponseDTO>> UpdateProblem(Guid problemId, UpdateProblemRequestDTO problemDto)
         {
             // check if problem exists
@@ -145,7 +154,9 @@ namespace LearningApp.Web.Modules.Problems
                 // if choices count is same, then update existing choices
                 if (problem.Choices.Count == problemDto.Choices.Count)
                 {
-                    foreach (var choice in problemDto.Choices)
+                    _mapper.Map(problemDto, problem);
+                    List<Choice> choices = new List<Choice>();
+                    foreach (var choice in problem.Choices)
                     {
                         if (choice.ChoiceId != null || choice.ChoiceId != Guid.Empty)
                         {
@@ -155,13 +166,14 @@ namespace LearningApp.Web.Modules.Problems
 
                             choiceEntity.ChoiceText = choice.ChoiceText;
                             choiceEntity.UpdatedAt = DateTime.UtcNow;
+                            choices.Add(choiceEntity);
                         }
                         else
                         {
                             throw new BadRequestException(GeneralMessages.ChoiceIdError);
                         }
                     }
-                    _mapper.Map(problemDto, problem);
+                    problem.Choices = choices;
                 }
 
                 // if choices count is different, then remove all choices if they exist and add new ones
@@ -178,6 +190,7 @@ namespace LearningApp.Web.Modules.Problems
                         choice.IsActive = true;
                         choice.CreatedAt = DateTime.UtcNow;
                     }
+                    await _problemRepository.AddChoicesForProblem(problem.Choices);
                 }
             }
 
@@ -185,8 +198,6 @@ namespace LearningApp.Web.Modules.Problems
             {
                 // remove choices
                 RemoveChoicesFromProblem(problem);
-
-
                 _mapper.Map(problemDto, problem);
             }
 
@@ -199,6 +210,7 @@ namespace LearningApp.Web.Modules.Problems
                     choice.IsActive = true;
                     choice.CreatedAt = DateTime.UtcNow;
                 }
+                await _problemRepository.AddChoicesForProblem(problem.Choices);
             }
 
             else
@@ -206,7 +218,7 @@ namespace LearningApp.Web.Modules.Problems
                 _mapper.Map(problemDto, problem);
             }
 
-            _problemRepository.UpdateProblem(problem);
+            //_problemRepository.UpdateProblem(problem);
             await _problemRepository.SaveChangesAsync();
 
             return new Response<ProblemResponseDTO>(true, null, GeneralMessages.RecordUpdated);
@@ -242,5 +254,6 @@ namespace LearningApp.Web.Modules.Problems
                 throw new InternalServerErrorException(e.Message);
             }
         }
+        #endregion
     }
 }

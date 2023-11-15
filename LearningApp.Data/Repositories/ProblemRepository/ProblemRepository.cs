@@ -52,5 +52,10 @@ namespace LearningApp.Data.Repositories.ProblemRepository
         public async Task<Choice?> GetChoiceByIdForProblem(Guid choiceId, Guid problemId) => 
             await _context.Choices.FirstOrDefaultAsync(x => x.ChoiceId == choiceId && x.ProblemId == problemId && x.IsActive);
 
+        public async Task<bool> AddChoicesForProblem(ICollection<Choice> choices)
+        {
+            await _context.Choices.AddRangeAsync(choices);
+            return true;
+        }
     }
 }
