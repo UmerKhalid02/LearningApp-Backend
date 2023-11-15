@@ -33,5 +33,12 @@ namespace LearningApp.Web.Modules.Problems
             var response = await _problemService.AddProblem(problemDto);
             return Ok(response);
         }
+
+        [HttpPut("{problemId}")]
+        public async Task<IActionResult> UpdateProblem(Guid problemId, [FromBody] UpdateProblemRequestDTO problemDto)
+        {
+            var response = await _problemService.UpdateProblem(problemId, problemDto);
+            return Ok(response);
+        }
     }
 }

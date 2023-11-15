@@ -10,6 +10,7 @@ namespace LearningApp.Web.Modules.Problems.Mapper
         {
             ProblemDetailsMapper();
             AddProblemMapper();
+            UpdateProblemMApper();
         }
 
         void ProblemDetailsMapper()
@@ -29,6 +30,17 @@ namespace LearningApp.Web.Modules.Problems.Mapper
 
             CreateMap<AddProblemRequestDTO, Problem>()
                 .ForPath(dest => dest.Choices, opt => opt.MapFrom(src => src.Choices))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToUpper()))
+                .ReverseMap();
+        }
+
+        void UpdateProblemMApper()
+        {
+            CreateMap<Choice, UpdateChoiceRequestDTO>().ReverseMap();
+
+            CreateMap<UpdateProblemRequestDTO, Problem>()
+                .ForPath(dest => dest.Choices, opt => opt.MapFrom(src => src.Choices))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToUpper()))
                 .ReverseMap();
         }
 
