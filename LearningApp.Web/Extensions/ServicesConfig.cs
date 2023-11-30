@@ -1,5 +1,6 @@
 ﻿using LearningApp.Data.IRepositories.IProblemRepository;
 using LearningApp.Data.Repositories.ProblemRepository;
+using LearningApp.Web.Modules.Languages.Python;
 using LearningApp.Web.Modules.Problems;
 
 namespace LearningApp.Web.Extensions
@@ -12,6 +13,7 @@ namespace LearningApp.Web.Extensions
 
             services.AddScoped<IProblemService, ProblemService>();
             services.AddScoped<IProblemRepository, ProblemRepository>();
+            services.AddScoped<IPythonService, PythonService>();
 
             return services;
         }

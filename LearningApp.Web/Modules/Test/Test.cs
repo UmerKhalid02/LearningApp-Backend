@@ -8,7 +8,7 @@ namespace LearningApp.Web.Modules.Test
 {
     [ApiController]
     [Route("api/v1/run-python-code")]
-    public class RunPython : ControllerBase
+    public class Test : ControllerBase
     {
         [HttpPost]
         public IActionResult RunPythonCode([FromBody] string code)

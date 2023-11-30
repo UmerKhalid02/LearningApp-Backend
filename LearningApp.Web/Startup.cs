@@ -1,4 +1,5 @@
 ﻿using LearningApp.Application;
+using LearningApp.Application.DataTransferObjects.Shared;
 using LearningApp.Data;
 using LearningApp.Web.Extensions;
 using LearningApp.Web.Middlewares;
@@ -18,6 +19,10 @@ namespace LearningApp.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationLayer();
+
+            // setup vercel token
+            Vercel.BaseUrl = Configuration["Vercel:BaseUrl"];
+
             services.AddControllers();
             services.AddSwaggerGen();
 
