@@ -10,10 +10,12 @@ namespace LearningApp.Web.Modules.Languages.Python
     {
         public async Task<PythonResponseDTO> RunCode(PythonRequestDTO request)
         {
-            string apiUrl = Vercel.BaseUrl + "execute-python-code";
+            string apiUrl = Vercel.BaseUrl + "api/v1/python/execute-python-code";
 
             using (HttpClient client = new HttpClient())
             {
+                client.DefaultRequestHeaders.Add("Authorization", Vercel.AccessToken);
+
                 var serializedRequest = JsonConvert.SerializeObject(request);
                 var content = new StringContent(serializedRequest, Encoding.UTF8, "application/json");
 

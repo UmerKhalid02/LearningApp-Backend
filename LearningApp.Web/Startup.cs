@@ -22,6 +22,7 @@ namespace LearningApp.Web
 
             // setup vercel token
             Vercel.BaseUrl = Configuration["Vercel:BaseUrl"];
+            Vercel.AccessToken = Configuration["Vercel:ACCESS_TOKEN"];
 
             services.AddControllers();
             services.AddSwaggerGen();
