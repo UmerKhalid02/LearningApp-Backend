@@ -20,7 +20,7 @@ namespace LearningApp.Web
         {
             services.AddApplicationLayer();
 
-            // setup vercel token
+            // setup vercel
             Vercel.BaseUrl = Configuration["Vercel:BaseUrl"];
             Vercel.AccessToken = Configuration["Vercel:ACCESS_TOKEN"];
 
@@ -30,6 +30,9 @@ namespace LearningApp.Web
             // add service for db connection
             services.AddDbContext<EFDataContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ConnectionStringMssql")));
+
+            services.AddAuthentication();
+            services.AddAuthorization();
 
             services.AddCors();
             services.AddServicesConfig();

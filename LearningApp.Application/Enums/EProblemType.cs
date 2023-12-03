@@ -7,6 +7,8 @@
         FIB = 3,
         CODE = 4,
         MATCH = 5
+        
+        // add more types below
     }
 
     public static class EProblemTypeExtensions
