@@ -51,14 +51,16 @@ namespace LearningApp.Web
             app.UseRouting();
 
             // -- Setup Cors here 
-            /*app.UseCors(x => x
-                .WithOrigins("http://0.0.0.0:80",
-                "http://3.109.132.170:80",
-                "http://192.168.1.6",
-                "http://localhost:80")
+            app.UseCors(x => x
+                .WithOrigins(
+                "http://127.0.0.1:8000",
+                "http://127.0.0.1:8001",
+                "http://127.0.0.1:5000",
+                "http://127.0.0.1:5173",
+                "http://localhost:5173")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
-                .AllowCredentials());*/
+                .AllowCredentials());
 
             app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseAuthentication();
