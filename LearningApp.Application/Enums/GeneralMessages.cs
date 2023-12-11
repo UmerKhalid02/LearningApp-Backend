@@ -12,6 +12,12 @@
         public const string RecordFetched = "Record has been fetched successfully";
         public const string RecordNotFetched = "Record not fetched successfully";
         public const string RecordNotFound = "Record not found";
+        
+        public const string UsernameExists = "User with this username already exists";
+        public const string EmailExists = "User with this email already exists";
+        public const string PasswordMatchError = "Password and Confirm Password do not match";
+        public const string InvalidRole = "Invalid Role";
+        public const string RegisterationSuccessful = "Registeration Successful";
 
         public const string InvalidTopicId = "Invalid TopicID";
         public const string InvalidProblemId = "Invalid ProblemID";
@@ -24,5 +30,11 @@
         public const string InvalidChoiceCountMCQ = "Choices for a given problem must be 4";
         public const string InvalidChoiceCountTF = "Choices for a given problem must be 2";
         public const string ProvideChoicesError = "Choices must be provided for the type MCQ/TF";
+        
+        
+        public const string TopicExists = "Topic with this name already exists";
+        public const string TopicsNotAdded = "Topics not added yet";
+
+
     }
 }
