@@ -9,8 +9,9 @@ namespace LearningApp.Data.IRepositories.IProblemRepository
         public Task<Problem> AddProblem(Problem problem);
         public Problem UpdateProblem(Problem problem);
         public Task SaveChangesAsync();
-        public Task<Topic?> GetTopicById(Guid topicId);
         public Task<Choice?> GetChoiceByIdForProblem(Guid choiceId, Guid problemId);
         public Task<bool> AddChoicesForProblem(ICollection<Choice> choices);
+
+        public Task<List<Problem>> GetProblemsByTopicAndLesson(Guid topicId, int lessonNumber);
     }
 }

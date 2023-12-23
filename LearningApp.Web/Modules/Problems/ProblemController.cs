@@ -47,5 +47,15 @@ namespace LearningApp.Web.Modules.Problems
             var response = await _problemService.DeleteProblem(problemId);
             return Ok(response);
         }
+
+
+
+        // below here starts problems for students
+        [HttpGet("{topicId}/{lessonNumber}")]
+        public async Task<IActionResult> GetProblemsByTopicAndLesson(Guid topicId, int lessonNumber)
+        {
+            var response = await _problemService.GetProblemsByTopicAndLesson(topicId, lessonNumber);
+            return Ok(response);
+        }
     }
 }

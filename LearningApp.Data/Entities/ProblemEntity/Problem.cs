@@ -26,6 +26,10 @@ namespace LearningApp.Data.Entities.ProblemEntity
         [Required]
         public virtual Guid TopicId { get; set; }
         public virtual Topic Topic { get; set; }
+
+        [Required]
+        public int LessonNumber { get; set; }
+
         public virtual ICollection<Choice>? Choices { get; set; }
     }
 }

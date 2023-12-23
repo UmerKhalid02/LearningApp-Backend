@@ -11,5 +11,7 @@ namespace LearningApp.Web.Modules.Problems
         public Task<Response<ProblemResponseDTO>> AddProblem(AddProblemRequestDTO problemDto); // can change return type since it returns null in payload 
         public Task<Response<ProblemResponseDTO>> UpdateProblem(Guid problemId, UpdateProblemRequestDTO problemDto);
         public Task<Response<bool>> DeleteProblem(Guid problemId);
+        
+        public Task<Response<List<ProblemResponseDTO>>> GetProblemsByTopicAndLesson(Guid topicId, int lessonNumber);
     }
 }

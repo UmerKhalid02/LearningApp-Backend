@@ -46,9 +46,6 @@ namespace LearningApp.Data.Repositories.ProblemRepository
 
         public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
 
-        public async Task<Topic?> GetTopicById(Guid topicId) =>
-            await _context.Topics.FirstOrDefaultAsync(x => x.TopicId == topicId && x.IsActive);
-
         public async Task<Choice?> GetChoiceByIdForProblem(Guid choiceId, Guid problemId) => 
             await _context.Choices.FirstOrDefaultAsync(x => x.ChoiceId == choiceId && x.ProblemId == problemId && x.IsActive);
 
@@ -56,6 +53,16 @@ namespace LearningApp.Data.Repositories.ProblemRepository
         {
             await _context.Choices.AddRangeAsync(choices);
             return true;
+        }
+
+        public async Task<List<Problem>> GetProblemsByTopicAndLesson(Guid topicId, int lessonNumber)
+        {
+            var problems = await _context.Problems
+                .Include(x => x.Topic)
+                .Include(x => x.Choices.Where(c => c.IsActive))
+                .Where(x => x.TopicId == topicId && x.LessonNumber == lessonNumber && x.IsActive).ToListAsync();
+
+            return problems;
         }
     }
 }
