@@ -1,6 +1,7 @@
 ﻿using LearningApp.Data.Entities.AuthenticationEntity;
 using LearningApp.Data.Entities.ProblemEntity;
 using LearningApp.Data.Entities.UserEntity;
+using LearningApp.Data.Seeders;
 using Microsoft.EntityFrameworkCore;
 
 namespace LearningApp.Data
@@ -19,6 +20,7 @@ namespace LearningApp.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("edu");
+            modelBuilder.SeedRoles();
         }
     }
 }
