@@ -10,6 +10,7 @@ namespace LearningApp.Application.DataTransferObjects.ProblemDTO
         public string? Difficulty { get; set; }
         public string? Solution { get; set; }
         public TopicDTO Topic { get; set; }
+        public int LessonNumber { get; set; }
         public List<ChoiceDTO>? Choices { get; set; }
     }
 
