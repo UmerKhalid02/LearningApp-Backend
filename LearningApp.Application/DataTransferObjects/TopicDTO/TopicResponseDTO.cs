@@ -4,5 +4,6 @@
     {
         public Guid TopicId { get; set; }
         public string? TopicName { get; set; }
+        public int TotalLessons { get; set; }
     }
 }
