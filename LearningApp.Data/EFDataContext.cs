@@ -1,4 +1,5 @@
-﻿using LearningApp.Data.Entities.AuthenticationEntity;
+﻿using LearningApp.Data.Entities;
+using LearningApp.Data.Entities.AuthenticationEntity;
 using LearningApp.Data.Entities.ProblemEntity;
 using LearningApp.Data.Entities.UserEntity;
 using LearningApp.Data.Seeders;
@@ -16,6 +17,7 @@ namespace LearningApp.Data
         public DbSet<Problem> Problems { get; set; }
         public DbSet<Topic> Topics { get; set; }
         public DbSet<Choice> Choices { get; set; }
+        public DbSet<UserLogin> UserLogin { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -35,6 +35,11 @@
         public const string TopicExists = "Topic with this name already exists";
         public const string TopicsNotAdded = "Topics not added yet";
 
+        public const string TokenIssue = "Something went wrong with token...";
+        public const string InvalidToken = "Invalid access token";
 
+        public const string UserLoggedInSuccessMessage = "Logged in Successfully.";
+        public const string UserLogoutSuccessMessage = "Logged out Successfully.";
+        public const string UserLogoutFailMessage = "Logged out fail.";
     }
 }

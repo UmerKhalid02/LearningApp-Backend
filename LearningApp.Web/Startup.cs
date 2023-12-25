@@ -20,7 +20,7 @@ namespace LearningApp.Web
         {
             services.AddApplicationLayer();
 
-            // setup vercel
+            // vercel setup
             Vercel.BaseUrl = Configuration["Vercel:BaseUrl"];
             Vercel.AccessToken = Configuration["Vercel:ACCESS_TOKEN"];
 
@@ -31,8 +31,14 @@ namespace LearningApp.Web
             services.AddDbContext<EFDataContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ConnectionStringMssql")));
 
-            services.AddAuthentication();
-            services.AddAuthorization();
+            // settings for JWT Secret Key
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = System.Text.Encoding.ASCII.GetBytes(appSettings.Secret);
+
+            services.AddJwtTokenAuthentication(Configuration, key);
+            services.AddHttpContextAccessor();
 
             services.AddCors();
             services.AddServicesConfig();
@@ -64,6 +70,7 @@ namespace LearningApp.Web
                 .AllowCredentials());
 
             app.UseMiddleware<ErrorHandlerMiddleware>();
+            app.UseMiddleware<AuthorizationMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
 

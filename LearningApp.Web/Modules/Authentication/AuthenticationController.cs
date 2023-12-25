@@ -19,9 +19,20 @@ namespace LearningApp.Web.Modules.Authentication
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO request) 
         {
-            await _authenticationService.Authenticate(request);
-            
-            return Ok();
+            var response = await _authenticationService.Authenticate(request);
+            return Ok(response);
+        }
+
+        [Authorize(Roles = "AD, ST, TR")]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            Guid userId = GetUserId();
+            LogoutRequestModel model = new()
+            {
+                UserId = userId
+            };
+            return Ok(await _authenticationService.LogoutService(model));
         }
 
         [AllowAnonymous]
@@ -31,6 +42,5 @@ namespace LearningApp.Web.Modules.Authentication
             var response = await _authenticationService.Register(request);
             return Ok(response);
         }
-
     }
 }
