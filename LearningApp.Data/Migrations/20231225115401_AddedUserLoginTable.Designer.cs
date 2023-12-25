@@ -4,6 +4,7 @@ using LearningApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningApp.Data.Migrations
 {
     [DbContext(typeof(EFDataContext))]
-    partial class EFDataContextModelSnapshot : ModelSnapshot
+    [Migration("20231225115401_AddedUserLoginTable")]
+    partial class AddedUserLoginTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,9 +221,6 @@ namespace LearningApp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TotalLessons")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -373,7 +372,7 @@ namespace LearningApp.Data.Migrations
             modelBuilder.Entity("LearningApp.Data.Entities.ProblemEntity.Problem", b =>
                 {
                     b.HasOne("LearningApp.Data.Entities.ProblemEntity.Topic", "Topic")
-                        .WithMany("Problem")
+                        .WithMany()
                         .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -414,11 +413,6 @@ namespace LearningApp.Data.Migrations
             modelBuilder.Entity("LearningApp.Data.Entities.ProblemEntity.Problem", b =>
                 {
                     b.Navigation("Choices");
-                });
-
-            modelBuilder.Entity("LearningApp.Data.Entities.ProblemEntity.Topic", b =>
-                {
-                    b.Navigation("Problem");
                 });
 
             modelBuilder.Entity("LearningApp.Data.Entities.UserEntity.User", b =>

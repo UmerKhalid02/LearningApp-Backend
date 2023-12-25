@@ -14,13 +14,17 @@ namespace LearningApp.Data.Repositories.TopicRepository
 
         public async Task<List<Topic>> GetAllTopics()
         {
-            var topics = await _context.Topics.Where(x => x.IsActive).ToListAsync();
+            var topics = await _context.Topics
+                .Include(x => x.Problem.Where(p => p.IsActive))
+                .Where(x => x.IsActive).ToListAsync();
             return topics;
         }
 
         public async Task<Topic> GetTopicById(Guid topicId)
         {
-            var topic = await _context.Topics.FirstOrDefaultAsync(x => x.TopicId == topicId && x.IsActive);
+            var topic = await _context.Topics
+                .Include(x => x.Problem.Where(p => p.IsActive))
+                .FirstOrDefaultAsync(x => x.TopicId == topicId && x.IsActive);
             return topic;
         }
 

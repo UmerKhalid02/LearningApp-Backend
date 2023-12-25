@@ -27,6 +27,9 @@ namespace LearningApp.Web.Modules.Topics
             if (topics == null)
                 return new Response<List<TopicResponseDTO>>(true, null, GeneralMessages.TopicsNotAdded);
 
+            foreach (var topic in topics)
+                topic.TotalLessons = topic.Problem.GroupBy(x => x.LessonNumber).Count();
+
             var response = _mapper.Map<List<TopicResponseDTO>>(topics);
             return new Response<List<TopicResponseDTO>>(true, response, GeneralMessages.RecordFetched);
         }
@@ -37,6 +40,8 @@ namespace LearningApp.Web.Modules.Topics
 
             if (topic == null)
                 throw new KeyNotFoundException(GeneralMessages.RecordNotFound);
+
+            topic.TotalLessons = topic.Problem.GroupBy(x => x.LessonNumber).Count();
 
             var response = _mapper.Map<TopicResponseDTO>(topic);
             return new Response<TopicResponseDTO>(true, response, GeneralMessages.RecordFetched);
