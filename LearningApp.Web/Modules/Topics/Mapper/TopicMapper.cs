@@ -12,7 +12,8 @@ namespace LearningApp.Web.Modules.Topics.Mapper
         }
 
         public void TopicDetails()
-        { 
+        {
+            CreateMap<LessonDTO, Lesson>().ReverseMap();
             CreateMap<Topic, TopicResponseDTO>().ReverseMap();
         }
 

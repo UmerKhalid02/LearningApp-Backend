@@ -4,8 +4,8 @@ using LearningApp.Application.Enums;
 using LearningApp.Application.Exceptions;
 using LearningApp.Application.Wrappers;
 using LearningApp.Data.Entities.ProblemEntity;
+using LearningApp.Data.IRepositories.ILessonRepository;
 using LearningApp.Data.IRepositories.IProblemRepository;
-using LearningApp.Data.IRepositories.ITopicRepository;
 
 namespace LearningApp.Web.Modules.Problems
 {
@@ -14,7 +14,7 @@ namespace LearningApp.Web.Modules.Problems
         #region Private Methods
 
         private readonly IProblemRepository _problemRepository;
-        private readonly ITopicRepository _topicRepository;
+        private readonly ILessonRepository _lessonRepository;
         private readonly IMapper _mapper;
 
         private bool DistinctChoicesKeys(List<UpdateChoiceRequestDTO> choiceDTO)
@@ -36,10 +36,10 @@ namespace LearningApp.Web.Modules.Problems
 
 
         #region Public Methods
-        public ProblemService(IProblemRepository problemRepository, ITopicRepository topicRepository, IMapper mapper)
+        public ProblemService(IProblemRepository problemRepository, ILessonRepository lessonRepository, IMapper mapper)
         {
             _problemRepository = problemRepository;
-            _topicRepository = topicRepository;
+            _lessonRepository = lessonRepository;
             _mapper = mapper;
         }
 
@@ -66,10 +66,10 @@ namespace LearningApp.Web.Modules.Problems
 
         public async Task<Response<ProblemResponseDTO>> AddProblem(AddProblemRequestDTO problemDto)
         {
-            // check if topic exists
-            var topic = await _topicRepository.GetTopicById(problemDto.TopicId);
-            if (topic == null)
-                throw new KeyNotFoundException(GeneralMessages.InvalidTopicId);
+            // check if lesson exists
+            var lesson = await _lessonRepository.GetLessonById(problemDto.LessonId);
+            if (lesson == null)
+                throw new KeyNotFoundException(GeneralMessages.InvalidLessonId);
 
             // check problem type
             if(EProblemTypeExtensions.ProblemTypeIsInvalid(problemDto.Type))
@@ -120,10 +120,10 @@ namespace LearningApp.Web.Modules.Problems
             if(problem == null)
                 throw new KeyNotFoundException(GeneralMessages.InvalidProblemId);
 
-            // check if topic exists
-            var topic = await _topicRepository.GetTopicById(problemDto.TopicId);
-            if (topic == null)
-                throw new KeyNotFoundException(GeneralMessages.InvalidTopicId);
+            // check if lesson exists
+            var lesson = await _lessonRepository.GetLessonById(problemDto.LessonId);
+            if (lesson == null)
+                throw new KeyNotFoundException(GeneralMessages.InvalidLessonId);
 
             // check problem type
             if (EProblemTypeExtensions.ProblemTypeIsInvalid(problemDto.Type))
@@ -259,14 +259,14 @@ namespace LearningApp.Web.Modules.Problems
             }
         }
 
-        public async Task<Response<List<ProblemResponseDTO>>> GetProblemsByTopicAndLesson(Guid topicId, int lessonNumber)
+        public async Task<Response<List<ProblemResponseDTO>>> GetProblemsByLessonId(Guid lessonId)
         {
-            // check if topic exists
-            var topic = await _topicRepository.GetTopicById(topicId);
-            if (topic == null)
+            // check if lesson exists
+            var lesson = await _lessonRepository.GetLessonById(lessonId);
+            if (lesson == null)
                 throw new KeyNotFoundException(GeneralMessages.InvalidTopicId);
 
-            var problems = await _problemRepository.GetProblemsByTopicAndLesson(topicId, lessonNumber);
+            var problems = await _problemRepository.GetProblemsLessonId(lessonId);
             var problemResponse = _mapper.Map<List<ProblemResponseDTO>>(problems);
 
             return new Response<List<ProblemResponseDTO>>(true, problemResponse, GeneralMessages.RecordFetched);

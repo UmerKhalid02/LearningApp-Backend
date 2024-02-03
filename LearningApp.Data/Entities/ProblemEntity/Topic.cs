@@ -12,7 +12,6 @@ namespace LearningApp.Data.Entities.ProblemEntity
 
         [Required]
         public string? TopicName { get; set; }
-        public int TotalLessons { get; set; } = 0;
-        public virtual ICollection<Problem> Problem { get; set; }
+        public virtual ICollection<Lesson> Lessons { get; set; }
     }
 }

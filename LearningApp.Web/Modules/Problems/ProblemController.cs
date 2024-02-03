@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LearningApp.Web.Modules.Problems
 {
-    [Route("api/v1/problems")]
+    [Route("api/v1")]
     public class ProblemController : BaseController
     {
         private readonly IProblemService _problemService;
@@ -13,35 +13,35 @@ namespace LearningApp.Web.Modules.Problems
             _problemService = problemService;
         }
 
-        [HttpGet]
+        [HttpGet("problems")]
         public async Task<IActionResult> GetProblems()
         {
             var response = await _problemService.GetAllProblems();
             return Ok(response);
         }
 
-        [HttpGet("{problemId}")]
+        [HttpGet("problems/{problemId}")]
         public async Task<IActionResult> GetProblemById(Guid problemId)
         {
             var response = await _problemService.GetProblemById(problemId);
             return Ok(response);
         }
 
-        [HttpPost]
+        [HttpPost("problems")]
         public async Task<IActionResult> AddProblem([FromBody] AddProblemRequestDTO problemDto)
         {
             var response = await _problemService.AddProblem(problemDto);
             return Ok(response);
         }
 
-        [HttpPut("{problemId}")]
+        [HttpPut("problems/{problemId}")]
         public async Task<IActionResult> UpdateProblem(Guid problemId, [FromBody] UpdateProblemRequestDTO problemDto)
         {
             var response = await _problemService.UpdateProblem(problemId, problemDto);
             return Ok(response);
         }
 
-        [HttpDelete("{problemId}")]
+        [HttpDelete("problems/{problemId}")]
         public async Task<IActionResult> DeleteProblem(Guid problemId)
         {
             var response = await _problemService.DeleteProblem(problemId);
@@ -51,10 +51,10 @@ namespace LearningApp.Web.Modules.Problems
 
 
         // below here starts problems for students
-        [HttpGet("{topicId}/{lessonNumber}")]
-        public async Task<IActionResult> GetProblemsByTopicAndLesson(Guid topicId, int lessonNumber)
+        [HttpGet("lessons/{lessonId}/problems")]
+        public async Task<IActionResult> GetProblemsByTopicAndLesson(Guid lessonId)
         {
-            var response = await _problemService.GetProblemsByTopicAndLesson(topicId, lessonNumber);
+            var response = await _problemService.GetProblemsByLessonId(lessonId);
             return Ok(response);
         }
     }

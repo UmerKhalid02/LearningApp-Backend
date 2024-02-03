@@ -15,7 +15,7 @@ namespace LearningApp.Data.Repositories.TopicRepository
         public async Task<List<Topic>> GetAllTopics()
         {
             var topics = await _context.Topics
-                .Include(x => x.Problem.Where(p => p.IsActive))
+                .Include(x => x.Lessons.Where(l => l.IsActive))
                 .Where(x => x.IsActive).ToListAsync();
             return topics;
         }
@@ -23,7 +23,7 @@ namespace LearningApp.Data.Repositories.TopicRepository
         public async Task<Topic> GetTopicById(Guid topicId)
         {
             var topic = await _context.Topics
-                .Include(x => x.Problem.Where(p => p.IsActive))
+                .Include(x => x.Lessons.Where(l => l.IsActive))
                 .FirstOrDefaultAsync(x => x.TopicId == topicId && x.IsActive);
             return topic;
         }

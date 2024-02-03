@@ -9,15 +9,15 @@ namespace LearningApp.Application.DataTransferObjects.ProblemDTO
         public string? Type { get; set; }
         public string? Difficulty { get; set; }
         public string? Solution { get; set; }
-        public TopicDTO Topic { get; set; }
-        public int LessonNumber { get; set; }
         public List<ChoiceDTO>? Choices { get; set; }
+        public LessonDTO Lesson { get; set; }
     }
 
-    public class TopicDTO
+    public class LessonDTO
     {
-        public Guid TopicId { get; set; }
-        public string? TopicName { get; set; }
+        public Guid LessonId { get; set; }
+        public int LessonNumber { get; set; }
+        public string? LessonName { get; set; }
     }
 
     public class ChoiceDTO

@@ -38,6 +38,10 @@
         public const string TokenIssue = "Something went wrong with token...";
         public const string InvalidToken = "Invalid access token";
 
+        public const string InvalidLessonId = "Invalid LessonID";
+        public const string LessonNumberExists = "Lesson with that lesson number already exists under the desired topic";
+
+
         public const string UserLoggedInSuccessMessage = "Logged in Successfully.";
         public const string UserLogoutSuccessMessage = "Logged out Successfully.";
         public const string UserLogoutFailMessage = "Logged out fail.";

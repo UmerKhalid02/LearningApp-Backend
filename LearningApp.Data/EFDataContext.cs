@@ -16,6 +16,7 @@ namespace LearningApp.Data
         public DbSet<Role> Roles { get; set; }
         public DbSet<Problem> Problems { get; set; }
         public DbSet<Topic> Topics { get; set; }
+        public DbSet<Lesson> Lessons { get; set; }
         public DbSet<Choice> Choices { get; set; }
         public DbSet<UserLogin> UserLogin { get; set; }
 
