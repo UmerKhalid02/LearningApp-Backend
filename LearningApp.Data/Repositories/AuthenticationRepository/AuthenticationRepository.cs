@@ -5,6 +5,7 @@ using LearningApp.Application.Exceptions;
 using LearningApp.Data.Entities;
 using LearningApp.Data.Entities.UserEntity;
 using LearningApp.Data.IRepositories.IAuthenticationRepository;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -95,7 +96,7 @@ namespace LearningApp.Data.Repositories.AuthenticationRepository
             var userRole = _context.UserRoles.Include(x => x.Role).FirstOrDefault(x => x.UserId == user.UserId && x.IsActive == true && x.DeletedAt == null);
             var newRefreshToken = GenerateRefreshToken();
 
-            var tokenDescriptor = GetTokenDescriptor(user, userRole.Role.RoleName, DateTime.UtcNow.AddMinutes(5));
+            var tokenDescriptor = GetTokenDescriptor(user, userRole.Role.RoleName, DateTime.UtcNow.AddSeconds(30));
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -111,6 +112,26 @@ namespace LearningApp.Data.Repositories.AuthenticationRepository
                 Token = tokenString,
                 RefreshToken = refreshToken,
             };
+        }
+
+        public async Task<UserLogin> GetUserLoginRecord(Guid userId, string refreshToken)
+        {
+            var userLogin = await _context.UserLogin.FirstOrDefaultAsync(x => x.UserId == userId && x.RefreshToken == refreshToken && x.Status == "active");
+            return userLogin;
+        }
+
+        public async Task<string> GenerateAccessToken(Guid userId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == userId && x.IsActive == true && x.DeletedAt == null);
+            if (user == null)
+                return null;
+            var userRole = await _context.UserRoles.Include(x => x.Role).FirstOrDefaultAsync(x => x.UserId == user.UserId && x.IsActive == true && x.DeletedAt == null);
+            var tokenDescriptor = GetTokenDescriptor(user, userRole.Role.RoleName, DateTime.UtcNow.AddSeconds(30));
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            return tokenString;
         }
 
         public async Task<bool> Logout(LogoutRequestModel model)
@@ -172,6 +193,5 @@ namespace LearningApp.Data.Repositories.AuthenticationRepository
         {
             await _context.SaveChangesAsync();
         }
-
     }
 }

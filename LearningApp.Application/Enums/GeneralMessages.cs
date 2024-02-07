@@ -45,5 +45,7 @@
         public const string UserLoggedInSuccessMessage = "Logged in Successfully.";
         public const string UserLogoutSuccessMessage = "Logged out Successfully.";
         public const string UserLogoutFailMessage = "Logged out fail.";
+        public const string UserLoginFail = "Invalid username/email or password";
+        public const string UnauthorizedAccess = "You are not authorized";
     }
 }

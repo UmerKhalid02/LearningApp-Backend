@@ -44,6 +44,10 @@ namespace LearningApp.Web.Modules.Authentication
         {
             var result = await _authenticationRepository.Authenticate(request);
 
+            if (result == null) {
+                return new Response<LoginResponseDTO>(false, null, GeneralMessages.UserLoginFail);
+            }
+
             JwtTokenRequestDTO refreshTokenRequestModel = new()
             {
                 JwtToken = result.Token,
@@ -52,6 +56,32 @@ namespace LearningApp.Web.Modules.Authentication
 
             AddAuthenticationCookies(refreshTokenRequestModel, DateTime.UtcNow.AddDays(25));
             return new Response<LoginResponseDTO>(true, result, GeneralMessages.UserLoggedInSuccessMessage);
+        }
+
+        public async Task<Response<RefreshTokenResponseDTO>> Refresh(RefreshTokenRequestDTO request, string refreshToken)
+        {
+            // get user login record
+            var userLogin = await _authenticationRepository.GetUserLoginRecord(request.UserId, refreshToken);
+            if (userLogin == null) {
+                throw new UnauthorizedAccessException(GeneralMessages.UnauthorizedAccess);
+            }
+
+            // generate new access token
+            var token = await _authenticationRepository.GenerateAccessToken(request.UserId);
+            JwtTokenRequestDTO refreshTokenRequestModel = new()
+            {
+                JwtToken = token,
+                RefreshToken = refreshToken
+            };
+
+            AddAuthenticationCookies(refreshTokenRequestModel, DateTime.UtcNow.AddDays(25));
+
+            var refreshResponse = new RefreshTokenResponseDTO
+            {
+                Token = token,
+            };
+
+            return new Response<RefreshTokenResponseDTO>(true, refreshResponse, null);
         }
 
         public async Task<Response<bool>> LogoutService(LogoutRequestModel model)

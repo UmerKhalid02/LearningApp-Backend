@@ -1,4 +1,5 @@
 ﻿using LearningApp.Application.DataTransferObjects.AuthenticationDTO;
+using LearningApp.Application.Enums;
 using LearningApp.Web.Modules.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,18 @@ namespace LearningApp.Web.Modules.Authentication
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO request) 
         {
             var response = await _authenticationService.Authenticate(request);
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshAccessToken([FromBody] RefreshTokenRequestDTO request)
+        {
+            string refreshToken = HttpContext.Request.Headers["refresh-token"];
+            if(refreshToken == null)
+                return Unauthorized(GeneralMessages.UnauthorizedAccess);
+
+            var response = await _authenticationService.Refresh(request, refreshToken);
             return Ok(response);
         }
 
