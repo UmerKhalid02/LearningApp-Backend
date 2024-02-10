@@ -8,6 +8,7 @@ using LearningApp.Data.Repositories.ProblemRepository;
 using LearningApp.Data.Repositories.TopicRepository;
 using LearningApp.Web.Modules.Authentication;
 using LearningApp.Web.Modules.Languages.Python;
+using LearningApp.Web.Modules.Leaderboard;
 using LearningApp.Web.Modules.Lessons;
 using LearningApp.Web.Modules.Problems;
 using LearningApp.Web.Modules.Topics;
@@ -33,6 +34,8 @@ namespace LearningApp.Web.Extensions
 
             services.AddScoped<ILessonService, LessonService>();
             services.AddScoped<ILessonRepository, LessonRepository>();
+
+            services.AddScoped<ILeaderboardService, LeaderboardService>();
 
             return services;
         }
