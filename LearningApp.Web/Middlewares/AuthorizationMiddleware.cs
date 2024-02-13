@@ -31,7 +31,8 @@ namespace LearningApp.Web.Middlewares
             }
 
             string token = string.Empty;
-            token = context.Request.HttpContext.Request.Cookies[AuthCookiesValue.AuthKey];
+            //token = context.Request.HttpContext.Request.Cookies[AuthCookiesValue.AuthKey];
+            token = context.Request.HttpContext.Request.Headers["Authorization"];
 
             if (token == null)
             {
@@ -47,13 +48,13 @@ namespace LearningApp.Web.Middlewares
                 return;
             }
 
-            var authToken = Newtonsoft.Json.JsonConvert.DeserializeObject<JwtTokenRequestDTO>(token);
+            /*var authToken = Newtonsoft.Json.JsonConvert.DeserializeObject<JwtTokenRequestDTO>(token);
             if (authToken == null || authToken.JwtToken == null)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 await context.Response.WriteAsJsonAsync(new Response<dynamic>(false, "Unauthorized"));
                 return;
-            }
+            }*/
 
             var key = Encoding.ASCII.GetBytes(JwtConfig.Secret);
 
@@ -72,7 +73,7 @@ namespace LearningApp.Web.Middlewares
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
                 };
-                ClaimsPrincipal principal = tokenHandler.ValidateToken(authToken.JwtToken, parameters, out SecurityToken securityToken);
+                ClaimsPrincipal principal = tokenHandler.ValidateToken(token, parameters, out SecurityToken securityToken);
 
                 var claims = context.User.Identity as ClaimsIdentity;
                 claims.AddClaims(principal.Claims);

@@ -96,7 +96,7 @@ namespace LearningApp.Data.Repositories.AuthenticationRepository
             var userRole = _context.UserRoles.Include(x => x.Role).FirstOrDefault(x => x.UserId == user.UserId && x.IsActive == true && x.DeletedAt == null);
             var newRefreshToken = GenerateRefreshToken();
 
-            var tokenDescriptor = GetTokenDescriptor(user, userRole.Role.RoleName, DateTime.UtcNow.AddSeconds(30));
+            var tokenDescriptor = GetTokenDescriptor(user, userRole.Role.RoleName, DateTime.UtcNow.AddMinutes(1));
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);

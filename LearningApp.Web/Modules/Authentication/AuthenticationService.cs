@@ -54,7 +54,8 @@ namespace LearningApp.Web.Modules.Authentication
                 RefreshToken = result.RefreshToken
             };
 
-            AddAuthenticationCookies(refreshTokenRequestModel, DateTime.UtcNow.AddDays(25));
+            // do not add in the cookies
+            //AddAuthenticationCookies(refreshTokenRequestModel, DateTime.UtcNow.AddDays(25));
             return new Response<LoginResponseDTO>(true, result, GeneralMessages.UserLoggedInSuccessMessage);
         }
 
