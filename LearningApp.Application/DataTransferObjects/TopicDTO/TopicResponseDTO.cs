@@ -4,6 +4,13 @@
     {
         public Guid TopicId { get; set; }
         public string? TopicName { get; set; }
-        public int TotalLessons { get; set; }
+        public List<LessonDTO> Lessons { get; set; }
+    }
+
+    public class LessonDTO
+    {
+        public Guid LessonId { get; set; }
+        public int LessonNumber { get; set; }
+        public string? LessonName { get; set; }
     }
 }

@@ -21,14 +21,11 @@ namespace LearningApp.Data.Entities.ProblemEntity
         [Required]
         public string? Solution { get; set; }
 
-        [Column("TopicID")]
-        [ForeignKey("TopicId")]
+        [Column("LessonID")]
+        [ForeignKey("LessonId")]
         [Required]
-        public virtual Guid TopicId { get; set; }
-        public virtual Topic Topic { get; set; }
-
-        [Required]
-        public int LessonNumber { get; set; }
+        public Guid LessonId { get; set; }
+        public virtual Lesson Lesson { get; set; }
 
         public virtual ICollection<Choice>? Choices { get; set; }
     }

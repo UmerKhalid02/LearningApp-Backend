@@ -5,7 +5,6 @@ using LearningApp.Application.Exceptions;
 using LearningApp.Application.Wrappers;
 using LearningApp.Data.Entities.ProblemEntity;
 using LearningApp.Data.IRepositories.ITopicRepository;
-using MediatR;
 
 namespace LearningApp.Web.Modules.Topics
 {
@@ -27,9 +26,6 @@ namespace LearningApp.Web.Modules.Topics
             if (topics == null)
                 return new Response<List<TopicResponseDTO>>(true, null, GeneralMessages.TopicsNotAdded);
 
-            foreach (var topic in topics)
-                topic.TotalLessons = topic.Problem.GroupBy(x => x.LessonNumber).Count();
-
             var response = _mapper.Map<List<TopicResponseDTO>>(topics);
             return new Response<List<TopicResponseDTO>>(true, response, GeneralMessages.RecordFetched);
         }
@@ -40,8 +36,6 @@ namespace LearningApp.Web.Modules.Topics
 
             if (topic == null)
                 throw new KeyNotFoundException(GeneralMessages.RecordNotFound);
-
-            topic.TotalLessons = topic.Problem.GroupBy(x => x.LessonNumber).Count();
 
             var response = _mapper.Map<TopicResponseDTO>(topic);
             return new Response<TopicResponseDTO>(true, response, GeneralMessages.RecordFetched);
@@ -92,6 +86,8 @@ namespace LearningApp.Web.Modules.Topics
             var topic = await _topicRepository.GetTopicById(topicId);
             if (topic == null)
                 throw new KeyNotFoundException(GeneralMessages.RecordNotFound);
+
+            // also remove respective lessons and their respective problems
 
             topic.UpdatedAt = DateTime.Now;
             topic.DeletedAt = DateTime.Now;

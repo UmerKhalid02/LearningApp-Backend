@@ -15,11 +15,11 @@ namespace LearningApp.Web.Modules.Problems.Mapper
 
         void ProblemDetailsMapper()
         {
-            CreateMap<TopicDTO, Topic>().ReverseMap();
+            CreateMap<LessonDTO, Lesson>().ReverseMap();
             CreateMap<ChoiceDTO, Choice>().ReverseMap();
 
             CreateMap<Problem, ProblemResponseDTO>()
-                .ForMember(dest => dest.Topic, opt => opt.MapFrom(src => src.Topic))
+                .ForMember(dest => dest.Lesson, opt => opt.MapFrom(src => src.Lesson))
                 .ForMember(dest => dest.Choices, opt => opt.MapFrom(src => src.Choices))
                 .ReverseMap();
         }
