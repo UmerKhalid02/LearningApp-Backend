@@ -42,6 +42,7 @@ namespace LearningApp.Web
 
             services.AddCors();
             services.AddServicesConfig();
+            services.AddSwaggerConfiguration();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +55,7 @@ namespace LearningApp.Web
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LearningApp.Web v1"));
             }
 
+            app.UseSwaggerSetup();
             app.UseRouting();
 
             // -- Setup Cors here 
