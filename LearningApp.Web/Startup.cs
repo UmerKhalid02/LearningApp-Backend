@@ -73,7 +73,7 @@ namespace LearningApp.Web
                 .AllowCredentials());
 
             app.UseMiddleware<ErrorHandlerMiddleware>();
-            app.UseMiddleware<AuthorizationMiddleware>();
+            //app.UseMiddleware<AuthorizationMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
 

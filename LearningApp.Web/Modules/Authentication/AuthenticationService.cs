@@ -21,7 +21,7 @@ namespace LearningApp.Web.Modules.Authentication
             _mapper = mapper;
         }
 
-        private bool AddAuthenticationCookies(JwtTokenRequestDTO token, DateTime expiryTime)
+        /*private bool AddAuthenticationCookies(JwtTokenRequestDTO token, DateTime expiryTime)
         {
             if (token == null)
                 throw new Exception(GeneralMessages.TokenIssue);
@@ -38,7 +38,7 @@ namespace LearningApp.Web.Modules.Authentication
             var authToken = Newtonsoft.Json.JsonConvert.SerializeObject(token);
             _httpContext.HttpContext.Response.Cookies.Append(AuthCookiesValue.AuthKey, authToken, option);
             return true;
-        }
+        }*/
 
         public async Task<Response<LoginResponseDTO>> Authenticate(LoginRequestDTO request)
         {
@@ -75,7 +75,7 @@ namespace LearningApp.Web.Modules.Authentication
                 RefreshToken = refreshToken
             };
 
-            AddAuthenticationCookies(refreshTokenRequestModel, DateTime.UtcNow.AddDays(25));
+            //AddAuthenticationCookies(refreshTokenRequestModel, DateTime.UtcNow.AddDays(25));
 
             var refreshResponse = new RefreshTokenResponseDTO
             {
@@ -90,7 +90,7 @@ namespace LearningApp.Web.Modules.Authentication
             dynamic result = await _authenticationRepository.Logout(model);
             if (result)
             {
-                _httpContext.HttpContext.Response.Cookies.Delete(AuthCookiesValue.AuthKey);
+                //_httpContext.HttpContext.Response.Cookies.Delete(AuthCookiesValue.AuthKey);
                 return new Response<bool>(true, true, GeneralMessages.UserLogoutSuccessMessage);
             }
             else
