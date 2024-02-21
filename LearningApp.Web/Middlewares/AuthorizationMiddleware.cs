@@ -60,6 +60,7 @@ namespace LearningApp.Web.Middlewares
 
             try
             {
+                token = token.Replace("Bearer ", "");
                 JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
                 TokenValidationParameters parameters = new TokenValidationParameters()
                 {

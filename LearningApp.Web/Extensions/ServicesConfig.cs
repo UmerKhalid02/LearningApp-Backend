@@ -1,8 +1,10 @@
 ﻿using LearningApp.Data.IRepositories.IAuthenticationRepository;
+using LearningApp.Data.IRepositories.ILeaderboardRepository;
 using LearningApp.Data.IRepositories.ILessonRepository;
 using LearningApp.Data.IRepositories.IProblemRepository;
 using LearningApp.Data.IRepositories.ITopicRepository;
 using LearningApp.Data.Repositories.AuthenticationRepository;
+using LearningApp.Data.Repositories.LeaderboardRepository;
 using LearningApp.Data.Repositories.LessonRepository;
 using LearningApp.Data.Repositories.ProblemRepository;
 using LearningApp.Data.Repositories.TopicRepository;
@@ -36,6 +38,7 @@ namespace LearningApp.Web.Extensions
             services.AddScoped<ILessonRepository, LessonRepository>();
 
             services.AddScoped<ILeaderboardService, LeaderboardService>();
+            services.AddScoped<ILeaderboardRepository, LeaderboardRepository>();
 
             return services;
         }
