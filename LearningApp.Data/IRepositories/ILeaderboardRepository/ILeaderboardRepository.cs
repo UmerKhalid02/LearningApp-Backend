@@ -4,6 +4,6 @@ namespace LearningApp.Data.IRepositories.ILeaderboardRepository
 {
     public interface ILeaderboardRepository
     {
-        public Task<List<User>> GetLeaderboardUsersTop100();
+        public Task<List<User>> GetLeaderboardStudentsTop100();
     }
 }

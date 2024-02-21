@@ -11,7 +11,7 @@ namespace LearningApp.Data.Repositories.LeaderboardRepository
         {
             _context = context;
         }
-        public async Task<List<User>> GetLeaderboardUsersTop100()
+        public async Task<List<User>> GetLeaderboardStudentsTop100()
         {
             var users = await _context.Users.Where(x => x.IsActive).OrderByDescending(x => x.XP).Take(100).ToListAsync();
             return users;

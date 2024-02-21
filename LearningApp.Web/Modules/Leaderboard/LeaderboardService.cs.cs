@@ -17,7 +17,7 @@ namespace LearningApp.Web.Modules.Leaderboard
         }
         public async Task<Response<List<LeaderboardResponseDTO>>> GetLeaderboard()
         {
-            var users = await _leaderboardRepository.GetLeaderboardUsersTop100();
+            var users = await _leaderboardRepository.GetLeaderboardStudentsTop100();
             var response = _mapper.Map<List<LeaderboardResponseDTO>>(users);
             return new Response<List<LeaderboardResponseDTO>>(true, response, GeneralMessages.RecordFetched);
         }
