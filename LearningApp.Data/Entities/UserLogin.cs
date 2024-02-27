@@ -18,6 +18,7 @@ namespace LearningApp.Data.Entities
         public DateTime RefreshTokenCreatedAt { get; set; }
         public DateTime RefreshTokenUpdatedAt { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
+        public DateTime? LoginAt { get; set; }
         public DateTime? LogOutAt { get; set; }
     }
 }
