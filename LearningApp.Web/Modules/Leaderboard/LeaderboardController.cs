@@ -1,4 +1,5 @@
 ﻿using LearningApp.Web.Modules.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningApp.Web.Modules.Leaderboard

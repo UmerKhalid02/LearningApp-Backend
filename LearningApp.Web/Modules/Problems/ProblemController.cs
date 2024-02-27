@@ -1,5 +1,6 @@
 ﻿using LearningApp.Application.DataTransferObjects.ProblemDTO;
 using LearningApp.Web.Modules.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningApp.Web.Modules.Problems
@@ -13,6 +14,7 @@ namespace LearningApp.Web.Modules.Problems
             _problemService = problemService;
         }
 
+        [Authorize(Roles = "AD")]
         [HttpGet("problems")]
         public async Task<IActionResult> GetProblems()
         {
@@ -20,6 +22,7 @@ namespace LearningApp.Web.Modules.Problems
             return Ok(response);
         }
 
+        [Authorize(Roles = "AD, ST, TR")]
         [HttpGet("problems/{problemId}")]
         public async Task<IActionResult> GetProblemById(Guid problemId)
         {
@@ -27,6 +30,7 @@ namespace LearningApp.Web.Modules.Problems
             return Ok(response);
         }
 
+        [Authorize(Roles = "AD, TR")]
         [HttpPost("problems")]
         public async Task<IActionResult> AddProblem([FromBody] AddProblemRequestDTO problemDto)
         {
@@ -34,6 +38,7 @@ namespace LearningApp.Web.Modules.Problems
             return Ok(response);
         }
 
+        [Authorize(Roles = "AD, TR")]
         [HttpPut("problems/{problemId}")]
         public async Task<IActionResult> UpdateProblem(Guid problemId, [FromBody] UpdateProblemRequestDTO problemDto)
         {
@@ -41,20 +46,11 @@ namespace LearningApp.Web.Modules.Problems
             return Ok(response);
         }
 
+        [Authorize(Roles = "AD, TR")]
         [HttpDelete("problems/{problemId}")]
         public async Task<IActionResult> DeleteProblem(Guid problemId)
         {
             var response = await _problemService.DeleteProblem(problemId);
-            return Ok(response);
-        }
-
-
-
-        // below here starts problems for students
-        [HttpGet("lessons/{lessonId}/problems")]
-        public async Task<IActionResult> GetProblemsByTopicAndLesson(Guid lessonId)
-        {
-            var response = await _problemService.GetProblemsByLessonId(lessonId);
             return Ok(response);
         }
     }
