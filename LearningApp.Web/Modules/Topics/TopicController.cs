@@ -17,7 +17,7 @@ namespace LearningApp.Web.Modules.Topics
             _lessonService = lessonService;
         }
 
-        [Authorize(Roles = "AD")]
+        [Authorize(Roles = "AD, ST, TR")]
         [HttpGet]
         public async Task<IActionResult> GetAllTopics()
         {
