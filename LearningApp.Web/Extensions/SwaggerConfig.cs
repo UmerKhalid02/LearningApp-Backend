@@ -36,7 +36,26 @@ namespace LearningApp.Web.Extensions
                     }
                 });
 
+                c.AddSecurityDefinition("Refresh", new OpenApiSecurityScheme
+                {
+                    Name = "refresh-token",
+                    Type = SecuritySchemeType.ApiKey,
+                    In = ParameterLocation.Header,
+                    Description = "refresh token for generating access token."
+                });
 
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement{
+                    {
+                       new OpenApiSecurityScheme{
+                             Reference = new OpenApiReference
+                             {
+                                 Type = ReferenceType.SecurityScheme,
+                                 Id = "Refresh"
+                             }
+                         },
+                         new string[] {}
+                    }
+                });
             });
         }
 
