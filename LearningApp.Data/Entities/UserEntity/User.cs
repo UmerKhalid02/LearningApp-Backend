@@ -19,7 +19,7 @@ namespace LearningApp.Data.Entities.UserEntity
         public string? Password { get; set; }
         public int? XP { get; set; }
         [DefaultValue(1)]
-        public int Multiplier { get; set; } = 1;
+        public double Multiplier { get; set; } = 1;
 
         [Required]
         public virtual UserRole? UserRole { get; set; }
