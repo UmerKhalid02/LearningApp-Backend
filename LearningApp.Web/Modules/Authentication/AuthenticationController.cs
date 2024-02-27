@@ -28,10 +28,11 @@ namespace LearningApp.Web.Modules.Authentication
         [HttpPost("refresh")]
         public async Task<IActionResult> RefreshAccessToken([FromBody] RefreshTokenRequestDTO request)
         {
-            string refreshToken = HttpContext.Request.Headers["refresh-token"];
+            string refreshToken = HttpContext.Request.Headers["Authorization"];
             if(refreshToken == null)
                 return Unauthorized(GeneralMessages.UnauthorizedAccess);
 
+            refreshToken = refreshToken.Replace("Bearer ", "");
             var response = await _authenticationService.Refresh(request, refreshToken);
             return Ok(response);
         }
