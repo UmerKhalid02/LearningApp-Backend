@@ -1,4 +1,5 @@
-﻿using LearningApp.Application.DataTransferObjects.DashboardDTO;
+﻿using AutoMapper;
+using LearningApp.Application.DataTransferObjects.DashboardDTO;
 using LearningApp.Application.Enums;
 using LearningApp.Application.Wrappers;
 using LearningApp.Data.Entities;
@@ -10,9 +11,11 @@ namespace LearningApp.Web.Modules.Dashboard
     public class DashboardService : IDashboardService
     {
         private readonly IDashboardRepository _dashboardRepository;
-        public DashboardService(IDashboardRepository dashboardRepository)
+        private readonly IMapper _mapper;
+        public DashboardService(IDashboardRepository dashboardRepository, IMapper mapper)
         {
             _dashboardRepository = dashboardRepository;
+            _mapper = mapper;
         }
 
         private async Task UserMultiplierHandler(User user, UserLoginTime loginTime)
@@ -35,6 +38,11 @@ namespace LearningApp.Web.Modules.Dashboard
 
         public async Task<Response<DashboardResponseDTO>> GetDashboard(Guid userId, string role)
         {
+            var user = await _dashboardRepository.GetUserDetails(userId);
+            if (user == null) {
+                throw new UnauthorizedAccessException(GeneralMessages.UnauthorizedAccess);
+            }
+
             var userLoginTime = await _dashboardRepository.GetUserLoginTime(userId);
 
             if (userLoginTime == null) { 
@@ -47,11 +55,8 @@ namespace LearningApp.Web.Modules.Dashboard
                 await UserMultiplierHandler(userLoginTime.User, userLoginTime);
             }
 
-            DashboardResponseDTO responseDTO = new()
-            {
-                Multiplier = userLoginTime.User.Multiplier
-            };
-
+            DashboardResponseDTO responseDTO = _mapper.Map<DashboardResponseDTO>(user);
+            
             return new Response<DashboardResponseDTO>(true, responseDTO, "Dashboard Response");
         }
     }
