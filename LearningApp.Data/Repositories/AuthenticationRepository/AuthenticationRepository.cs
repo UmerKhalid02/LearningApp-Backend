@@ -105,6 +105,17 @@ namespace LearningApp.Data.Repositories.AuthenticationRepository
             // save refresh token in database
             await SaveRefreshToken(refreshToken, user.UserId);
 
+            // add user in LoginTime table
+            var userLoginTime = await _context.UserLoginTime.Where(x => x.UserId == user.UserId).FirstOrDefaultAsync();
+            if (userLoginTime == null) {
+                UserLoginTime newLogin = new()
+                {
+                    UserId = user.UserId
+                };
+                await _context.UserLoginTime.AddAsync(newLogin);
+                await _context.SaveChangesAsync();
+            }
+
             return new LoginResponseDTO()
             {
                 UserId = user.UserId,
