@@ -19,6 +19,7 @@ namespace LearningApp.Data
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<Choice> Choices { get; set; }
         public DbSet<UserLogin> UserLogin { get; set; }
+        public DbSet<UserLoginTime> UserLoginTime { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
