@@ -383,9 +383,6 @@ namespace LearningApp.Data.Migrations
                     b.Property<DateTime?>("LogOutAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("LoginAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("RefreshToken")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
