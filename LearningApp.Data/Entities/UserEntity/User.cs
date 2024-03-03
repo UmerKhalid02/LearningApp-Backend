@@ -20,7 +20,8 @@ namespace LearningApp.Data.Entities.UserEntity
         public int? XP { get; set; }
         [DefaultValue(1)]
         public double Multiplier { get; set; } = 1;
-
+        [DefaultValue(1)]
+        public int Level { get; set; } = 1;
         [Required]
         public virtual UserRole? UserRole { get; set; }
     }
