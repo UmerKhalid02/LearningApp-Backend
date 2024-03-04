@@ -1,5 +1,6 @@
 ﻿using LearningApp.Application.Enums;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace LearningApp.Web.Modules.Common
 {
@@ -13,9 +14,22 @@ namespace LearningApp.Web.Modules.Common
                 Guid userId = Guid.Parse(User.Claims.First(i => i.Type == "UserId").Value);
                 return userId;
             }
-            catch (Exception)
+            catch
             {
-                throw new Exception(GeneralMessages.InvalidToken);
+                throw new UnauthorizedAccessException(GeneralMessages.InvalidToken);
+            }
+        }
+
+        protected string GetUserRole()
+        {
+            try
+            {
+                string userRole = User.FindFirstValue(ClaimTypes.Role);
+                return userRole;
+            }
+            catch
+            {
+                throw new UnauthorizedAccessException(GeneralMessages.InvalidToken);
             }
         }
     }

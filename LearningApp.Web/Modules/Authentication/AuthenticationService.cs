@@ -11,51 +11,22 @@ namespace LearningApp.Web.Modules.Authentication
     public class AuthenticationService : IAuthenticationService
     {
         private readonly IAuthenticationRepository _authenticationRepository;
-        private readonly IHttpContextAccessor _httpContext;
         private readonly IMapper _mapper;
 
-        public AuthenticationService(IAuthenticationRepository authenticationRepository, IHttpContextAccessor httpContext, IMapper mapper)
+        public AuthenticationService(IAuthenticationRepository authenticationRepository, IMapper mapper)
         {
             _authenticationRepository = authenticationRepository;
-            _httpContext = httpContext;
             _mapper = mapper;
         }
-
-        /*private bool AddAuthenticationCookies(JwtTokenRequestDTO token, DateTime expiryTime)
-        {
-            if (token == null)
-                throw new Exception(GeneralMessages.TokenIssue);
-
-            CookieOptions option = new()
-            {
-                Expires = expiryTime,
-                Secure = false,
-                SameSite = SameSiteMode.Lax,
-                Path = "/",
-                HttpOnly = true
-            };
-
-            var authToken = Newtonsoft.Json.JsonConvert.SerializeObject(token);
-            _httpContext.HttpContext.Response.Cookies.Append(AuthCookiesValue.AuthKey, authToken, option);
-            return true;
-        }*/
 
         public async Task<Response<LoginResponseDTO>> Authenticate(LoginRequestDTO request)
         {
             var result = await _authenticationRepository.Authenticate(request);
 
             if (result == null) {
-                return new Response<LoginResponseDTO>(false, null, GeneralMessages.UserLoginFail);
+                throw new BadRequestException(GeneralMessages.UserLoginFail);
             }
 
-            JwtTokenRequestDTO refreshTokenRequestModel = new()
-            {
-                JwtToken = result.Token,
-                RefreshToken = result.RefreshToken
-            };
-
-            // do not add in the cookies
-            //AddAuthenticationCookies(refreshTokenRequestModel, DateTime.UtcNow.AddDays(25));
             return new Response<LoginResponseDTO>(true, result, GeneralMessages.UserLoggedInSuccessMessage);
         }
 
@@ -63,20 +34,13 @@ namespace LearningApp.Web.Modules.Authentication
         {
             // get user login record
             var userLogin = await _authenticationRepository.GetUserLoginRecord(request.UserId, refreshToken);
-            if (userLogin == null) {
+            if (userLogin == null || userLogin.RefreshTokenExpiryTime < DateTime.UtcNow) {
                 throw new UnauthorizedAccessException(GeneralMessages.UnauthorizedAccess);
             }
 
             // generate new access token
             var token = await _authenticationRepository.GenerateAccessToken(request.UserId);
-            JwtTokenRequestDTO refreshTokenRequestModel = new()
-            {
-                JwtToken = token,
-                RefreshToken = refreshToken
-            };
-
-            //AddAuthenticationCookies(refreshTokenRequestModel, DateTime.UtcNow.AddDays(25));
-
+            
             var refreshResponse = new RefreshTokenResponseDTO
             {
                 Token = token,
@@ -90,12 +54,11 @@ namespace LearningApp.Web.Modules.Authentication
             dynamic result = await _authenticationRepository.Logout(model);
             if (result)
             {
-                //_httpContext.HttpContext.Response.Cookies.Delete(AuthCookiesValue.AuthKey);
                 return new Response<bool>(true, true, GeneralMessages.UserLogoutSuccessMessage);
             }
             else
             {
-                return new Response<bool>(false, false, GeneralMessages.UserLogoutFailMessage);
+                throw new Exception(GeneralMessages.UserLogoutFailMessage);
             }
         }
 

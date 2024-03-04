@@ -35,8 +35,6 @@ namespace LearningApp.Web.Extensions
                          new string[] {}
                     }
                 });
-
-
             });
         }
 

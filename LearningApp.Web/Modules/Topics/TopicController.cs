@@ -1,5 +1,7 @@
 ﻿using LearningApp.Application.DataTransferObjects.TopicDTO;
 using LearningApp.Web.Modules.Common;
+using LearningApp.Web.Modules.Lessons;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningApp.Web.Modules.Topics
@@ -8,11 +10,14 @@ namespace LearningApp.Web.Modules.Topics
     public class TopicController : BaseController
     {
         private readonly ITopicService _topicService;
-        public TopicController(ITopicService topicService)
+        private readonly ILessonService _lessonService;
+        public TopicController(ITopicService topicService, ILessonService lessonService)
         {
             _topicService = topicService;
+            _lessonService = lessonService;
         }
 
+        [Authorize(Roles = "AD, ST, TR")]
         [HttpGet]
         public async Task<IActionResult> GetAllTopics()
         {
@@ -20,6 +25,7 @@ namespace LearningApp.Web.Modules.Topics
             return Ok(response);
         }
 
+        [Authorize(Roles = "AD, ST, TR")]
         [HttpGet("{topicId}")]
         public async Task<IActionResult> GetTopicById(Guid topicId)
         {
@@ -27,7 +33,14 @@ namespace LearningApp.Web.Modules.Topics
             return Ok(response);
         }
 
+        [Authorize(Roles = "AD, ST, TR")]
+        [HttpGet("{topicId}/lessons")]
+        public async Task<IActionResult> GetAllLessonsByTopicId(Guid topicId)
+        {
+            return Ok(await _lessonService.GetAllLessonsByTopicId(topicId));
+        }
 
+        [Authorize(Roles = "AD, TR")]
         [HttpPost]
         public async Task<IActionResult> CreateTopic([FromBody] TopicRequestDTO request)
         {
@@ -35,14 +48,15 @@ namespace LearningApp.Web.Modules.Topics
             return Ok(response);
         }
 
-
+        [Authorize(Roles = "AD, TR")]
         [HttpPut("{topicId}")]
         public async Task<IActionResult> UpdateTopic(Guid topicId, [FromBody] TopicRequestDTO request)
         {
             var response = await _topicService.UpdateTopic(topicId, request);
             return Ok(response);
         }
-        
+
+        [Authorize(Roles = "AD, TR")]
         [HttpDelete("{topicId}")]
         public async Task<IActionResult> DeleteTopic(Guid topicId)
         {

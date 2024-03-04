@@ -4,6 +4,9 @@ namespace LearningApp.Application.DataTransferObjects.AuthenticationDTO
 {
     public class RegisterRequestDTO
     {
+        [RegularExpression("^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,5}$", ErrorMessage = "Invalid name")]
+        public string? FullName { get; set; }
+
         [Required(ErrorMessage = "Please enter username")]
         [RegularExpression("^[a-zA-Z0-9_.-]{3,16}$", ErrorMessage = "Invalid username")]
         public string? UserName { get; set; }

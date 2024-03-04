@@ -55,9 +55,9 @@ namespace LearningApp.Data.Repositories.AuthenticationRepository
             return tokenDescriptor;
         }
 
-        private async Task<bool> SaveRefreshToken(string OldRefreshToken, string RefreshToken, Guid userId)
+        private async Task<bool> SaveRefreshToken(string RefreshToken, Guid userId)
         {
-            UserLogin? userLogin = await _context.UserLogin.Where(m => m.RefreshToken == OldRefreshToken && m.UserId == userId).FirstOrDefaultAsync();
+            UserLogin? userLogin = await _context.UserLogin.Where(m => m.RefreshToken == RefreshToken && m.UserId == userId).FirstOrDefaultAsync();
             if (userLogin != null)
             {
                 userLogin.UserId = userId;
@@ -71,7 +71,6 @@ namespace LearningApp.Data.Repositories.AuthenticationRepository
             {
                 UserLogin obj = new()
                 {
-                    LogOutAt = DateTime.Now,
                     UserId = userId,
                     RefreshToken = RefreshToken,
                     RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(25),
@@ -104,7 +103,18 @@ namespace LearningApp.Data.Repositories.AuthenticationRepository
             string refreshToken = await newRefreshToken;
 
             // save refresh token in database
-            await SaveRefreshToken("", refreshToken, user.UserId);
+            await SaveRefreshToken(refreshToken, user.UserId);
+
+            // add user in LoginTime table
+            var userLoginTime = await _context.UserLoginTime.Where(x => x.UserId == user.UserId).FirstOrDefaultAsync();
+            if (userLoginTime == null) {
+                UserLoginTime newLogin = new()
+                {
+                    UserId = user.UserId
+                };
+                await _context.UserLoginTime.AddAsync(newLogin);
+                await _context.SaveChangesAsync();
+            }
 
             return new LoginResponseDTO()
             {

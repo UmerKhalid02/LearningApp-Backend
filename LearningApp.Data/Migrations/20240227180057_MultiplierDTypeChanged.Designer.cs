@@ -4,6 +4,7 @@ using LearningApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningApp.Data.Migrations
 {
     [DbContext(typeof(EFDataContext))]
-    partial class EFDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240227180057_MultiplierDTypeChanged")]
+    partial class MultiplierDTypeChanged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -302,9 +304,6 @@ namespace LearningApp.Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Level")
-                        .HasColumnType("int");
-
                     b.Property<double>("Multiplier")
                         .HasColumnType("float");
 
@@ -413,27 +412,6 @@ namespace LearningApp.Data.Migrations
                     b.ToTable("UserLogin", "edu");
                 });
 
-            modelBuilder.Entity("LearningApp.Data.Entities.UserLoginTime", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ID");
-
-                    b.Property<DateTime?>("LoginAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("UserID");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserLoginTime", "edu");
-                });
-
             modelBuilder.Entity("LearningApp.Data.Entities.ProblemEntity.Choice", b =>
                 {
                     b.HasOne("LearningApp.Data.Entities.ProblemEntity.Problem", null)
@@ -485,17 +463,6 @@ namespace LearningApp.Data.Migrations
                 });
 
             modelBuilder.Entity("LearningApp.Data.Entities.UserLogin", b =>
-                {
-                    b.HasOne("LearningApp.Data.Entities.UserEntity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("LearningApp.Data.Entities.UserLoginTime", b =>
                 {
                     b.HasOne("LearningApp.Data.Entities.UserEntity.User", "User")
                         .WithMany()

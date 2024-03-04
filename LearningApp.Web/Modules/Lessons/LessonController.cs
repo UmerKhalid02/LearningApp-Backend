@@ -1,5 +1,6 @@
 ﻿using LearningApp.Application.DataTransferObjects.LessonDTO;
 using LearningApp.Web.Modules.Common;
+using LearningApp.Web.Modules.Problems;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +10,11 @@ namespace LearningApp.Web.Modules.Lessons
     public class LessonController : BaseController
     {
         private readonly ILessonService _lessonService;
-        public LessonController(ILessonService lessonService) 
+        private readonly IProblemService _problemService;
+        public LessonController(ILessonService lessonService, IProblemService problemService) 
         {
             _lessonService = lessonService;
+            _problemService = problemService;
         }
 
         //[Authorize(Roles = "AD")]
@@ -21,11 +24,12 @@ namespace LearningApp.Web.Modules.Lessons
             return Ok(await _lessonService.GetAllLessons());
         }
 
-        //[Authorize(Roles = "AD, ST, TR")]
-        [HttpGet("topics/{topicId}/lessons")]
-        public async Task<IActionResult> GetAllLessonsByTopicId(Guid topicId)
+        [Authorize(Roles = "AD, ST, TR")]
+        [HttpGet("{lessonId}/problems")]
+        public async Task<IActionResult> GetProblemsByLessonId(Guid lessonId)
         {
-            return Ok(await _lessonService.GetAllLessonsByTopicId(topicId));
+            var response = await _problemService.GetProblemsByLessonId(lessonId);
+            return Ok(response);
         }
 
         //[Authorize(Roles = "AD, ST, TR")]
