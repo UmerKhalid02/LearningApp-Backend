@@ -16,6 +16,7 @@ using LearningApp.Web.Modules.Languages.Python;
 using LearningApp.Web.Modules.Leaderboard;
 using LearningApp.Web.Modules.Lessons;
 using LearningApp.Web.Modules.Problems;
+using LearningApp.Web.Modules.Score;
 using LearningApp.Web.Modules.Topics;
 
 namespace LearningApp.Web.Extensions
@@ -45,6 +46,8 @@ namespace LearningApp.Web.Extensions
 
             services.AddScoped<IDashboardService, DashboardService>();
             services.AddScoped<IDashboardRepository, DashboardRepository>();
+
+            services.AddScoped<IScoreService, ScoreService>();
 
             return services;
         }
