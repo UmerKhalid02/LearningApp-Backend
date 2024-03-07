@@ -51,6 +51,15 @@ namespace LearningApp.Web.Modules.Problems
 
             return new Response<List<ProblemResponseDTO>>(true, response, GeneralMessages.RecordFetched);
         }
+        
+        public async Task<Response<List<ProblemResponseDTO>>> GetAllProblems(Guid userId)
+        {
+            // convert to pagination response
+            var problems = await _problemRepository.GetAllProblems(userId);
+            var response = _mapper.Map<List<ProblemResponseDTO>>(problems);
+
+            return new Response<List<ProblemResponseDTO>>(true, response, GeneralMessages.RecordFetched);
+        }
 
         public async Task<Response<ProblemResponseDTO>> GetProblemById(Guid problemId)
         {

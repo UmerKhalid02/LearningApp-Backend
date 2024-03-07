@@ -22,6 +22,16 @@ namespace LearningApp.Data.Repositories.LessonRepository
 
             return lessons;
         }
+        
+        public async Task<List<Lesson>> GetAllLessons(Guid userId)
+        {
+            var lessons = await _context.Lessons
+                .Include(x => x.Topic)
+                .Include(x => x.Problems.Where(p => p.IsActive)).ThenInclude(p => p.Choices.Where(c => c.IsActive))
+                .Where(x => x.IsActive && x.CreatedBy == userId).ToListAsync();
+
+            return lessons;
+        }
 
         public async Task<List<Lesson>> GetAllLessonsByTopicId(Guid topicId)
         {

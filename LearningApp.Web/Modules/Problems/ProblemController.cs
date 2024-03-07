@@ -56,5 +56,14 @@ namespace LearningApp.Web.Modules.Problems
             var response = await _problemService.DeleteProblem(problemId, userId);
             return Ok(response);
         }
+
+        // problems created by specific user/teacher 
+        [Authorize(Roles = "AD")]
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetUserCreatedProblems(Guid userId)
+        {
+            var response = await _problemService.GetAllProblems(userId);
+            return Ok(response);
+        }
     }
 }

@@ -28,6 +28,13 @@ namespace LearningApp.Web.Modules.Lessons
             var response = _mapper.Map<List<LessonResponseDTO>>(lessons);
             return new Response<List<LessonResponseDTO>>(true, response, GeneralMessages.RecordFetched);
         }
+        
+        public async Task<Response<List<LessonResponseDTO>>> GetAllLessons(Guid userId)
+        {
+            var lessons = await _lessonRepository.GetAllLessons(userId);
+            var response = _mapper.Map<List<LessonResponseDTO>>(lessons);
+            return new Response<List<LessonResponseDTO>>(true, response, GeneralMessages.RecordFetched);
+        }
 
         public async Task<Response<List<LessonResponseDTO>>> GetAllLessonsByTopicId(Guid topicId)
         {

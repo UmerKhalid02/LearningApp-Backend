@@ -30,6 +30,17 @@ namespace LearningApp.Web.Modules.Topics
             return new Response<List<TopicResponseDTO>>(true, response, GeneralMessages.RecordFetched);
         }
 
+        public async Task<Response<List<TopicResponseDTO>>> GetAllTopics(Guid userId)
+        {
+            var topics = await _topicRepository.GetAllTopics(userId);
+
+            if (topics == null)
+                return new Response<List<TopicResponseDTO>>(true, null, GeneralMessages.TopicsNotAdded);
+
+            var response = _mapper.Map<List<TopicResponseDTO>>(topics);
+            return new Response<List<TopicResponseDTO>>(true, response, GeneralMessages.RecordFetched);
+        }
+
         public async Task<Response<TopicResponseDTO>> GetTopicById(Guid topicId)
         {
             var topic = await _topicRepository.GetTopicById(topicId);

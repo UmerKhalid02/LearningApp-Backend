@@ -20,6 +20,14 @@ namespace LearningApp.Data.Repositories.TopicRepository
             return topics;
         }
 
+        public async Task<List<Topic>> GetAllTopics(Guid userId)
+        {
+            var topics = await _context.Topics
+                .Include(x => x.Lessons.Where(l => l.IsActive))
+                .Where(x => x.IsActive && x.CreatedBy == userId).ToListAsync();
+            return topics;
+        }
+
         public async Task<Topic> GetTopicById(Guid topicId)
         {
             var topic = await _context.Topics

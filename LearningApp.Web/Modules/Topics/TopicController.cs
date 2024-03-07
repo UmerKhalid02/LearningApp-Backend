@@ -66,5 +66,14 @@ namespace LearningApp.Web.Modules.Topics
             var response = await _topicService.DeleteTopic(topicId, userId);
             return Ok(response);
         }
+
+        // topics created by specific user/teacher 
+        [Authorize(Roles = "AD, TR")]
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetAllUserCreatedTopics(Guid userId)
+        {
+            var response = await _topicService.GetAllTopics(userId);
+            return Ok(response);
+        }
     }
 }

@@ -21,6 +21,16 @@ namespace LearningApp.Data.Repositories.ProblemRepository
 
             return query;
         }
+        
+        public async Task<List<Problem>> GetAllProblems(Guid userId)
+        {
+            var query = await _context.Problems
+                .Include(x => x.Lesson)
+                .Include(x => x.Choices.Where(c => c.IsActive))
+                .Where(x => x.IsActive && x.CreatedBy == userId).ToListAsync();
+
+            return query;
+        }
 
         public async Task<Problem> GetProblemById(Guid problemId)
         {

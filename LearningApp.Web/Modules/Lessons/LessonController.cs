@@ -62,5 +62,13 @@ namespace LearningApp.Web.Modules.Lessons
             var userId = this.GetUserId();
             return Ok(await _lessonService.DeleteLesson(lessonId, userId));
         }
+
+        // lessons created by specific user/teacher 
+        [Authorize(Roles = "AD, TR")]
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetAllUserCreatedLessons(Guid userId)
+        {
+            return Ok(await _lessonService.GetAllLessons(userId));
+        }
     }
 }
