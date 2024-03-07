@@ -25,6 +25,7 @@ namespace LearningApp.Data
         {
             modelBuilder.HasDefaultSchema("edu");
             modelBuilder.SeedRoles();
+            modelBuilder.SeedAdmin();
         }
     }
 }
