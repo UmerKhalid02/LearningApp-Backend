@@ -5,6 +5,7 @@ namespace LearningApp.Data.IRepositories.ILessonRepository
     public interface ILessonRepository
     {
         public Task<List<Lesson>> GetAllLessons();
+        public Task<List<Lesson>> GetAllLessons(Guid userId);
         public Task<List<Lesson>> GetAllLessonsByTopicId(Guid topicId);
         public Task<Lesson> GetLessonById(Guid lessonId);
         public Task<Lesson> GetLessonByLessonNumber(int lessonNumber, Guid topicId);
