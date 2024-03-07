@@ -22,6 +22,7 @@ namespace LearningApp.Web.Modules.Score
             int xpGained = (int)Math.Round(request.CorrectProblems * user.Multiplier);
 
             var totalUserScore = user.XP + xpGained;
+            user.TotalXP += xpGained;
 
             var dif = totalUserScore / 1000.000;
 
@@ -39,7 +40,8 @@ namespace LearningApp.Web.Modules.Score
             CalculateScoreResponseDTO response = new()
             {
                 XpGained = xpGained,
-                TotalXp = (int)user.XP,
+                Xp = user.XP,
+                TotalXp = user.TotalXP,
                 Level = user.Level,
             };
 
