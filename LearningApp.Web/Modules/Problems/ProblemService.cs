@@ -64,7 +64,7 @@ namespace LearningApp.Web.Modules.Problems
             return new Response<ProblemResponseDTO>(true, response, GeneralMessages.RecordFetched);
         }
 
-        public async Task<Response<ProblemResponseDTO>> AddProblem(AddProblemRequestDTO problemDto)
+        public async Task<Response<ProblemResponseDTO>> AddProblem(AddProblemRequestDTO problemDto, Guid creatorId)
         {
             // check if lesson exists
             var lesson = await _lessonRepository.GetLessonById(problemDto.LessonId);
@@ -87,6 +87,7 @@ namespace LearningApp.Web.Modules.Problems
             var problem = _mapper.Map<Problem>(problemDto);
             problem.IsActive = true;
             problem.CreatedAt = DateTime.UtcNow;
+            problem.CreatedBy = creatorId;
 
             if (problem.Choices != null && problem.Choices.Count > 0) {
 
@@ -101,6 +102,7 @@ namespace LearningApp.Web.Modules.Problems
                 {
                     choice.IsActive = true;
                     choice.CreatedAt = DateTime.UtcNow;
+                    choice.CreatedBy = creatorId;
                 }
             }
 
@@ -113,7 +115,7 @@ namespace LearningApp.Web.Modules.Problems
         // TODO: check if problem type is other than mcq/tf, then choices must not be provided
         // TODO: mapping is creating problems
 
-        public async Task<Response<ProblemResponseDTO>> UpdateProblem(Guid problemId, UpdateProblemRequestDTO problemDto)
+        public async Task<Response<ProblemResponseDTO>> UpdateProblem(Guid problemId, UpdateProblemRequestDTO problemDto, Guid userId)
         {
             // check if problem exists
             var problem = await _problemRepository.GetProblemById(problemId);
@@ -170,6 +172,7 @@ namespace LearningApp.Web.Modules.Problems
 
                             choiceEntity.ChoiceText = choice.ChoiceText;
                             choiceEntity.UpdatedAt = DateTime.UtcNow;
+                            choice.UpdatedBy = userId;
                             choices.Add(choiceEntity);
                         }
                         else
@@ -193,6 +196,7 @@ namespace LearningApp.Web.Modules.Problems
                         choice.ChoiceId = Guid.NewGuid();
                         choice.IsActive = true;
                         choice.CreatedAt = DateTime.UtcNow;
+                        choice.CreatedBy = userId;
                     }
                     await _problemRepository.AddChoicesForProblem(problem.Choices);
                 }
@@ -213,6 +217,7 @@ namespace LearningApp.Web.Modules.Problems
                     choice.ChoiceId = Guid.NewGuid();
                     choice.IsActive = true;
                     choice.CreatedAt = DateTime.UtcNow;
+                    choice.CreatedBy = userId;
                 }
                 await _problemRepository.AddChoicesForProblem(problem.Choices);
             }
@@ -222,13 +227,16 @@ namespace LearningApp.Web.Modules.Problems
                 _mapper.Map(problemDto, problem);
             }
 
+            problem.UpdatedAt = DateTime.UtcNow;
+            problem.UpdatedBy = userId;
+
             //_problemRepository.UpdateProblem(problem);
             await _problemRepository.SaveChangesAsync();
 
             return new Response<ProblemResponseDTO>(true, null, GeneralMessages.RecordUpdated);
         }
 
-        public async Task<Response<bool>> DeleteProblem(Guid problemId)
+        public async Task<Response<bool>> DeleteProblem(Guid problemId, Guid userId)
         {
             var problem = await _problemRepository.GetProblemById(problemId);
             if(problem == null)
@@ -237,6 +245,7 @@ namespace LearningApp.Web.Modules.Problems
             problem.IsActive = false;
             problem.UpdatedAt = DateTime.UtcNow;
             problem.DeletedAt = DateTime.UtcNow;
+            problem.DeletedBy = userId;
 
             // delete all choices
             if (problem.Choices != null && problem.Choices.Count > 0)
@@ -246,6 +255,7 @@ namespace LearningApp.Web.Modules.Problems
                     choice.IsActive = false;
                     choice.UpdatedAt = DateTime.UtcNow;
                     choice.DeletedAt = DateTime.UtcNow;
+                    choice.DeletedBy = userId;
                 }
             }
 

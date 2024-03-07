@@ -54,7 +54,7 @@ namespace LearningApp.Web.Modules.Lessons
             return new Response<LessonResponseDTO>(true, response, GeneralMessages.RecordFetched);
         }
 
-        public async Task<Response<LessonResponseDTO>> CreateLesson(LessonRequestDTO request)
+        public async Task<Response<LessonResponseDTO>> CreateLesson(LessonRequestDTO request, Guid userId)
         {
             // check if lesson topic with that id exists
             var topic = await _topicRepository.GetTopicById(request.TopicId);
@@ -71,6 +71,7 @@ namespace LearningApp.Web.Modules.Lessons
             var newLesson = _mapper.Map<Lesson>(request);
             newLesson.IsActive = true;
             newLesson.CreatedAt = DateTime.UtcNow;
+            newLesson.CreatedBy = userId;
 
             await _lessonRepository.AddLesson(newLesson);
             await _lessonRepository.SaveChanges();
@@ -78,7 +79,7 @@ namespace LearningApp.Web.Modules.Lessons
             return new Response<LessonResponseDTO>(true, null, GeneralMessages.RecordAdded);
         }
 
-        public async Task<Response<LessonResponseDTO>> UpdateLesson(Guid lessonId, LessonRequestDTO request)
+        public async Task<Response<LessonResponseDTO>> UpdateLesson(Guid lessonId, LessonRequestDTO request, Guid userId)
         {
             // check if lesson exists
             var lesson = await _lessonRepository.GetLessonById(lessonId);
@@ -99,12 +100,15 @@ namespace LearningApp.Web.Modules.Lessons
             }
 
             _mapper.Map(request, lesson);
+            lesson.UpdatedAt = DateTime.UtcNow;
+            lesson.UpdatedBy = userId;
+
             await _lessonRepository.SaveChanges();
 
             return new Response<LessonResponseDTO>(true, _mapper.Map<LessonResponseDTO>(lesson), GeneralMessages.RecordUpdated);
         }
 
-        public async Task<Response<bool>> DeleteLesson(Guid lessonId)
+        public async Task<Response<bool>> DeleteLesson(Guid lessonId, Guid userId)
         {
             // check if lesson exists
             var lesson = await _lessonRepository.GetLessonById(lessonId);
@@ -118,6 +122,7 @@ namespace LearningApp.Web.Modules.Lessons
                     problem.IsActive = false;
                     problem.UpdatedAt = DateTime.UtcNow;
                     problem.DeletedAt = DateTime.UtcNow;
+                    problem.DeletedBy = userId;
 
                     // also remove choices?
                 }
@@ -126,6 +131,7 @@ namespace LearningApp.Web.Modules.Lessons
             lesson.IsActive = false;
             lesson.UpdatedAt = DateTime.UtcNow;
             lesson.DeletedAt = DateTime.UtcNow;
+            lesson.DeletedBy = userId;
 
             await _lessonRepository.SaveChanges();
             return new Response<bool>(true, true, GeneralMessages.RecordDeleted);

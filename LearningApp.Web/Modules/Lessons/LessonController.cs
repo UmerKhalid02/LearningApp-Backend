@@ -43,21 +43,24 @@ namespace LearningApp.Web.Modules.Lessons
         [HttpPost("lessons")]
         public async Task<IActionResult> CreateLesson([FromBody] LessonRequestDTO request)
         {
-            return Ok(await _lessonService.CreateLesson(request));
+            var userId = this.GetUserId();
+            return Ok(await _lessonService.CreateLesson(request, userId));
         }
 
         [Authorize(Roles = "AD, TR")]
         [HttpPut("lessons/{lessonId}")]
         public async Task<IActionResult> UpdateLesson(Guid lessonId, [FromBody] LessonRequestDTO request)
         {
-            return Ok(await _lessonService.UpdateLesson(lessonId, request));
+            var userId = this.GetUserId();
+            return Ok(await _lessonService.UpdateLesson(lessonId, request, userId));
         }
 
         [Authorize(Roles = "AD, TR")]
         [HttpDelete("lessons/{lessonId}")]
         public async Task<IActionResult> DeleteLesson(Guid lessonId)
         {
-            return Ok(await _lessonService.DeleteLesson(lessonId));
+            var userId = this.GetUserId();
+            return Ok(await _lessonService.DeleteLesson(lessonId, userId));
         }
     }
 }

@@ -44,7 +44,8 @@ namespace LearningApp.Web.Modules.Topics
         [HttpPost]
         public async Task<IActionResult> CreateTopic([FromBody] TopicRequestDTO request)
         {
-            var response = await _topicService.CreateTopic(request);
+            var userId = this.GetUserId();
+            var response = await _topicService.CreateTopic(request, userId);
             return Ok(response);
         }
 
@@ -52,7 +53,8 @@ namespace LearningApp.Web.Modules.Topics
         [HttpPut("{topicId}")]
         public async Task<IActionResult> UpdateTopic(Guid topicId, [FromBody] TopicRequestDTO request)
         {
-            var response = await _topicService.UpdateTopic(topicId, request);
+            var userId = this.GetUserId();
+            var response = await _topicService.UpdateTopic(topicId, request, userId);
             return Ok(response);
         }
 
@@ -60,7 +62,8 @@ namespace LearningApp.Web.Modules.Topics
         [HttpDelete("{topicId}")]
         public async Task<IActionResult> DeleteTopic(Guid topicId)
         {
-            var response = await _topicService.DeleteTopic(topicId);
+            var userId = this.GetUserId();
+            var response = await _topicService.DeleteTopic(topicId, userId);
             return Ok(response);
         }
     }

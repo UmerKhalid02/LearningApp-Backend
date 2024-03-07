@@ -34,7 +34,8 @@ namespace LearningApp.Web.Modules.Problems
         [HttpPost("problems")]
         public async Task<IActionResult> AddProblem([FromBody] AddProblemRequestDTO problemDto)
         {
-            var response = await _problemService.AddProblem(problemDto);
+            var creatorId = this.GetUserId();
+            var response = await _problemService.AddProblem(problemDto, creatorId);
             return Ok(response);
         }
 
@@ -42,7 +43,8 @@ namespace LearningApp.Web.Modules.Problems
         [HttpPut("problems/{problemId}")]
         public async Task<IActionResult> UpdateProblem(Guid problemId, [FromBody] UpdateProblemRequestDTO problemDto)
         {
-            var response = await _problemService.UpdateProblem(problemId, problemDto);
+            var userId = this.GetUserId();
+            var response = await _problemService.UpdateProblem(problemId, problemDto, userId);
             return Ok(response);
         }
 
@@ -50,7 +52,8 @@ namespace LearningApp.Web.Modules.Problems
         [HttpDelete("problems/{problemId}")]
         public async Task<IActionResult> DeleteProblem(Guid problemId)
         {
-            var response = await _problemService.DeleteProblem(problemId);
+            var userId = this.GetUserId();
+            var response = await _problemService.DeleteProblem(problemId, userId);
             return Ok(response);
         }
     }
