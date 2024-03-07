@@ -4,6 +4,7 @@ using LearningApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningApp.Data.Migrations
 {
     [DbContext(typeof(EFDataContext))]
-    partial class EFDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240307124825_UpdatedAdminSeeder")]
+    partial class UpdatedAdminSeeder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
