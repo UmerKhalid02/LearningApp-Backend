@@ -17,7 +17,10 @@ namespace LearningApp.Data.Entities.UserEntity
         public string? Email { get; set; }
         [Required]
         public string? Password { get; set; }
-        public int? XP { get; set; }
+        [DefaultValue(0)]
+        public int XP { get; set; }
+        [DefaultValue(0)]
+        public int TotalXP { get; set; }
         [DefaultValue(1)]
         public double Multiplier { get; set; } = 1;
         [DefaultValue(1)]
