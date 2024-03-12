@@ -40,6 +40,9 @@ namespace LearningApp.Web
             services.AddJwtTokenAuthentication(Configuration, key);
             services.AddHttpContextAccessor();
 
+            // quartz setup
+            services.AddQuartzConfig();
+
             services.AddCors();
             services.AddServicesConfig();
             services.AddSwaggerConfiguration();
