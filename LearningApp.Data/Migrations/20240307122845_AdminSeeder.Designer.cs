@@ -4,6 +4,7 @@ using LearningApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningApp.Data.Migrations
 {
     [DbContext(typeof(EFDataContext))]
-    partial class EFDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240307122845_AdminSeeder")]
+    partial class AdminSeeder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -339,7 +341,7 @@ namespace LearningApp.Data.Migrations
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "admin@admin.com",
                             FullName = "admin",
-                            IsActive = true,
+                            IsActive = false,
                             Level = 1,
                             Multiplier = 1.0,
                             Password = "admin123",
@@ -399,7 +401,7 @@ namespace LearningApp.Data.Migrations
                         {
                             UserRoleId = new Guid("65ae02d5-e00f-433a-8d75-71c20b883c5f"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = true,
+                            IsActive = false,
                             RoleId = new Guid("35dc76b5-8de7-4eb3-a29c-9a05686a6f89"),
                             UserId = new Guid("b29a769c-2f0c-4a2b-a72d-71cdd4c98502")
                         });
