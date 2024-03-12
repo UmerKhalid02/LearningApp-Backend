@@ -16,5 +16,11 @@ namespace LearningApp.Data.Repositories.LeaderboardRepository
             var users = await _context.Users.Include(x => x.UserRole).ThenInclude(x => x.Role).Where(x => x.IsActive && x.UserRole.Role.RoleName == "ST").OrderByDescending(x => x.TotalXP).Take(100).ToListAsync();
             return users;
         }
+
+        public async Task ResetLeaderboard()
+        {
+            await _context.Users.ForEachAsync(u => u.TotalXP = 0);
+            await _context.SaveChangesAsync();
+        }
     }
 }
