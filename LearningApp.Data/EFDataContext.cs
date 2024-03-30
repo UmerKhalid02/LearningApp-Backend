@@ -18,6 +18,7 @@ namespace LearningApp.Data
         public DbSet<Topic> Topics { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<Choice> Choices { get; set; }
+        public DbSet<Solution> Solutions { get; set; }
         public DbSet<UserLogin> UserLogin { get; set; }
         public DbSet<UserLoginTime> UserLoginTime { get; set; }
 

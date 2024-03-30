@@ -101,7 +101,8 @@ namespace LearningApp.Web.Modules.Topics
                 throw new KeyNotFoundException(GeneralMessages.RecordNotFound);
 
             // also remove respective lessons and their respective problems
-
+            await _topicRepository.DeleteTopic(topic);
+            
             topic.UpdatedAt = DateTime.Now;
             topic.DeletedAt = DateTime.Now;
             topic.DeletedBy = userId;

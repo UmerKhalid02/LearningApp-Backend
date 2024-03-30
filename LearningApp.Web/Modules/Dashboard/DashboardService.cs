@@ -22,7 +22,7 @@ namespace LearningApp.Web.Modules.Dashboard
         {
             TimeSpan timeSpan =  DateTime.UtcNow - (DateTime)loginTime.LoginAt;
 
-            if (timeSpan.TotalHours > 18 && timeSpan.TotalHours <= 24) {
+            if (timeSpan.TotalHours > 20 && timeSpan.TotalHours <= 28) {
                 user.Multiplier += 0.5;
                 loginTime.LoginAt = DateTime.UtcNow;
                 await _dashboardRepository.SaveChangesAsync();
