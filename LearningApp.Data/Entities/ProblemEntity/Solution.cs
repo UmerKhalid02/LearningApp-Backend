@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LearningApp.Data.Entities.ProblemEntity
 {
     [Table("Solution")]
-    public class Solution : BaseEntity
+    public class Solution
     {
         [Key]
         public Guid SolutionId { get; set; }
@@ -16,5 +16,6 @@ namespace LearningApp.Data.Entities.ProblemEntity
 
         [Required]
         public string? SolutionText { get; set; }
+        public bool IsActive { get; set; }
     }
 }

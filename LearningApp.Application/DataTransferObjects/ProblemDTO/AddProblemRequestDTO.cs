@@ -16,7 +16,7 @@ namespace LearningApp.Application.DataTransferObjects.ProblemDTO
         [Required]
         public string? Difficulty { get; set; }
         [Required]
-        public string? Solution { get; set; }
+        public List<SolutionRequestDTO>? Solution { get; set; }
         public List<ChoiceRequestDTO>? Choices { get; set; }
     }
 
@@ -25,5 +25,11 @@ namespace LearningApp.Application.DataTransferObjects.ProblemDTO
         [Required]
         [MinLength(1, ErrorMessage = "Minimum length for ChoiceText must be 1")]
         public string? ChoiceText { get; set; }
+    }
+
+    public class SolutionRequestDTO
+    {
+        [Required]
+        public string? SolutionText { get; set; }
     }
 }

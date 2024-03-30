@@ -8,7 +8,7 @@ namespace LearningApp.Application.DataTransferObjects.ProblemDTO
         public string? SampleCode { get; set; }
         public string? Type { get; set; }
         public string? Difficulty { get; set; }
-        public string? Solution { get; set; }
+        public List<SolutionDTO>? Solution { get; set; }
         public List<ChoiceDTO>? Choices { get; set; }
         public LessonDTO Lesson { get; set; }
     }
@@ -18,6 +18,12 @@ namespace LearningApp.Application.DataTransferObjects.ProblemDTO
         public Guid LessonId { get; set; }
         public int LessonNumber { get; set; }
         public string? LessonName { get; set; }
+    }
+
+    public class SolutionDTO
+    {
+        public Guid SolutionId;
+        public string? SolutionText { get; set; }
     }
 
     public class ChoiceDTO
