@@ -6,7 +6,8 @@
         TF = 2,
         FIB = 3,
         CODE = 4,
-        MATCH = 5
+        MATCH = 5,
+        ORDER = 6
         
         // add more types below
     }
@@ -22,6 +23,7 @@
                 EProblemType.FIB => "FIB",
                 EProblemType.CODE => "CODE",
                 EProblemType.MATCH => "MATCH",
+                EProblemType.ORDER => "ORDER",
                 _ => "UNKNOWN",
             };
         }
@@ -38,6 +40,7 @@
                 "FIB" => 3,
                 "CODE" => 4,
                 "MATCH" => 5,
+                "ORDER" => 6,
                 _ => 0,
             };
         }
