@@ -65,7 +65,7 @@ namespace LearningApp.Web.Modules.Lessons
 
         // lessons created by specific user/teacher 
         [Authorize(Roles = "AD, TR")]
-        [HttpGet("lessons/{userId}")]
+        [HttpGet("users/{userId}/lessons")]
         public async Task<IActionResult> GetAllUserCreatedLessons(Guid userId)
         {
             return Ok(await _lessonService.GetAllLessons(userId));

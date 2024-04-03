@@ -18,7 +18,7 @@ namespace LearningApp.Web.Modules.Topics
         }
 
         [Authorize(Roles = "AD, ST, TR")]
-        [HttpGet]
+        [HttpGet("topics")]
         public async Task<IActionResult> GetAllTopics()
         {
             var response = await _topicService.GetAllTopics();
@@ -26,7 +26,7 @@ namespace LearningApp.Web.Modules.Topics
         }
 
         [Authorize(Roles = "AD, ST, TR")]
-        [HttpGet("{topicId}")]
+        [HttpGet("topics/{topicId}")]
         public async Task<IActionResult> GetTopicById(Guid topicId)
         {
             var response = await _topicService.GetTopicById(topicId);
@@ -34,7 +34,7 @@ namespace LearningApp.Web.Modules.Topics
         }
 
         [Authorize(Roles = "AD, ST, TR")]
-        [HttpGet("{topicId}/lessons")]
+        [HttpGet("topics/{topicId}/lessons")]
         public async Task<IActionResult> GetAllLessonsByTopicId(Guid topicId)
         {
             return Ok(await _lessonService.GetAllLessonsByTopicId(topicId));
@@ -50,7 +50,7 @@ namespace LearningApp.Web.Modules.Topics
         }
 
         [Authorize(Roles = "AD, TR")]
-        [HttpPut("{topicId}")]
+        [HttpPut("topics/{topicId}")]
         public async Task<IActionResult> UpdateTopic(Guid topicId, [FromBody] TopicRequestDTO request)
         {
             var userId = this.GetUserId();
@@ -59,7 +59,7 @@ namespace LearningApp.Web.Modules.Topics
         }
 
         [Authorize(Roles = "AD, TR")]
-        [HttpDelete("{topicId}")]
+        [HttpDelete("topics/{topicId}")]
         public async Task<IActionResult> DeleteTopic(Guid topicId)
         {
             var userId = this.GetUserId();
@@ -69,7 +69,7 @@ namespace LearningApp.Web.Modules.Topics
 
         // topics created by specific user/teacher 
         [Authorize(Roles = "AD, TR")]
-        [HttpGet("{userId}")]
+        [HttpGet("users/{userId}/topics")]
         public async Task<IActionResult> GetAllUserCreatedTopics(Guid userId)
         {
             var response = await _topicService.GetAllTopics(userId);
