@@ -115,6 +115,11 @@ namespace LearningApp.Web.Modules.Problems
                 }
             }
 
+            foreach (var sol in problem.Solution)
+            {
+                sol.IsActive = true;
+            }
+
             await _problemRepository.AddProblem(problem);
             await _problemRepository.SaveChangesAsync();
 
@@ -234,6 +239,11 @@ namespace LearningApp.Web.Modules.Problems
             else
             {
                 _mapper.Map(problemDto, problem);
+            }
+
+            // remove solution, then add new solutions
+            foreach (var solution in problem.Solution) {
+                solution.IsActive = true;
             }
 
             problem.UpdatedAt = DateTime.UtcNow;

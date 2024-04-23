@@ -54,6 +54,10 @@ namespace LearningApp.Data.Repositories.TopicRepository
             await _context.SaveChangesAsync();
         }
 
-        
+        public async Task<bool> DeleteTopic(Topic topic)
+        {
+            _context.Topics.Remove(topic);
+            return true;
+        }
     }
 }

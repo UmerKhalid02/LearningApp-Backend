@@ -16,6 +16,7 @@ namespace LearningApp.Data.Repositories.ProblemRepository
         {
             var query = await _context.Problems
                 .Include(x => x.Lesson)
+                .Include(x => x.Solution.Where(s => s.IsActive))
                 .Include(x => x.Choices.Where(c => c.IsActive))
                 .Where(x => x.IsActive).ToListAsync();
 
@@ -26,6 +27,7 @@ namespace LearningApp.Data.Repositories.ProblemRepository
         {
             var query = await _context.Problems
                 .Include(x => x.Lesson)
+                .Include(x => x.Solution.Where(s => s.IsActive))
                 .Include(x => x.Choices.Where(c => c.IsActive))
                 .Where(x => x.IsActive && x.CreatedBy == userId).ToListAsync();
 
@@ -36,6 +38,7 @@ namespace LearningApp.Data.Repositories.ProblemRepository
         {
             var query = await _context.Problems
                 .Include(x => x.Lesson)
+                .Include(x => x.Solution.Where(s => s.IsActive))
                 .Include(x => x.Choices.Where(c => c.IsActive))
                 .FirstOrDefaultAsync(x => x.ProblemId == problemId && x.IsActive);
 
@@ -69,6 +72,7 @@ namespace LearningApp.Data.Repositories.ProblemRepository
         {
             var problems = await _context.Problems
                 .Include(x => x.Lesson)
+                .Include(x => x.Solution.Where(s => s.IsActive))
                 .Include(x => x.Choices.Where(c => c.IsActive))
                 .Where(x => x.LessonId == lessonId && x.IsActive).ToListAsync();
 

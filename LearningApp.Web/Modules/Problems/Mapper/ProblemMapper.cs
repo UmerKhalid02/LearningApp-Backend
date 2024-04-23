@@ -17,6 +17,7 @@ namespace LearningApp.Web.Modules.Problems.Mapper
         {
             CreateMap<LessonDTO, Lesson>().ReverseMap();
             CreateMap<ChoiceDTO, Choice>().ReverseMap();
+            CreateMap<SolutionDTO, Solution>().ReverseMap();
 
             CreateMap<Problem, ProblemResponseDTO>()
                 .ForMember(dest => dest.Lesson, opt => opt.MapFrom(src => src.Lesson))
@@ -27,6 +28,7 @@ namespace LearningApp.Web.Modules.Problems.Mapper
         void AddProblemMapper() 
         {
             CreateMap<Choice, ChoiceRequestDTO>().ReverseMap();
+            CreateMap<Solution, SolutionRequestDTO>().ReverseMap();
 
             CreateMap<AddProblemRequestDTO, Problem>()
                 .ForMember(dest => dest.Choices, opt => opt.MapFrom(src => src.Choices))

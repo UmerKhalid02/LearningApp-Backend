@@ -58,8 +58,8 @@ namespace LearningApp.Web.Modules.Problems
         }
 
         // problems created by specific user/teacher 
-        [Authorize(Roles = "AD")]
-        [HttpGet("problems/{userId}")]
+        [Authorize(Roles = "AD, TR")]
+        [HttpGet("users/{userId}/problems")]
         public async Task<IActionResult> GetUserCreatedProblems(Guid userId)
         {
             var response = await _problemService.GetAllProblems(userId);

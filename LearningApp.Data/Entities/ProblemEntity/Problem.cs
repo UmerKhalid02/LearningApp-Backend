@@ -18,8 +18,6 @@ namespace LearningApp.Data.Entities.ProblemEntity
         public string? Type { get; set; }
         [Required]
         public string? Difficulty { get; set; }
-        [Required]
-        public string? Solution { get; set; }
 
         [Column("LessonID")]
         [ForeignKey("LessonId")]
@@ -27,6 +25,7 @@ namespace LearningApp.Data.Entities.ProblemEntity
         public Guid LessonId { get; set; }
         public virtual Lesson Lesson { get; set; }
 
+        public virtual ICollection<Solution> Solution { get; set; }
         public virtual ICollection<Choice>? Choices { get; set; }
     }
 }
