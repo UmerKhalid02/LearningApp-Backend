@@ -15,9 +15,21 @@ namespace LearningApp.Data.Repositories.ProblemRepository
         public async Task<List<Problem>> GetAllProblems()
         {
             var query = await _context.Problems
-                .Include(x => x.Topic)
+                .Include(x => x.Lesson)
+                .Include(x => x.Solution.Where(s => s.IsActive))
                 .Include(x => x.Choices.Where(c => c.IsActive))
                 .Where(x => x.IsActive).ToListAsync();
+
+            return query;
+        }
+        
+        public async Task<List<Problem>> GetAllProblems(Guid userId)
+        {
+            var query = await _context.Problems
+                .Include(x => x.Lesson)
+                .Include(x => x.Solution.Where(s => s.IsActive))
+                .Include(x => x.Choices.Where(c => c.IsActive))
+                .Where(x => x.IsActive && x.CreatedBy == userId).ToListAsync();
 
             return query;
         }
@@ -25,7 +37,8 @@ namespace LearningApp.Data.Repositories.ProblemRepository
         public async Task<Problem> GetProblemById(Guid problemId)
         {
             var query = await _context.Problems
-                .Include(x => x.Topic)
+                .Include(x => x.Lesson)
+                .Include(x => x.Solution.Where(s => s.IsActive))
                 .Include(x => x.Choices.Where(c => c.IsActive))
                 .FirstOrDefaultAsync(x => x.ProblemId == problemId && x.IsActive);
 
@@ -46,9 +59,6 @@ namespace LearningApp.Data.Repositories.ProblemRepository
 
         public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
 
-        public async Task<Topic?> GetTopicById(Guid topicId) =>
-            await _context.Topics.FirstOrDefaultAsync(x => x.TopicId == topicId && x.IsActive);
-
         public async Task<Choice?> GetChoiceByIdForProblem(Guid choiceId, Guid problemId) => 
             await _context.Choices.FirstOrDefaultAsync(x => x.ChoiceId == choiceId && x.ProblemId == problemId && x.IsActive);
 
@@ -56,6 +66,17 @@ namespace LearningApp.Data.Repositories.ProblemRepository
         {
             await _context.Choices.AddRangeAsync(choices);
             return true;
+        }
+
+        public async Task<List<Problem>> GetProblemsLessonId(Guid lessonId)
+        {
+            var problems = await _context.Problems
+                .Include(x => x.Lesson)
+                .Include(x => x.Solution.Where(s => s.IsActive))
+                .Include(x => x.Choices.Where(c => c.IsActive))
+                .Where(x => x.LessonId == lessonId && x.IsActive).ToListAsync();
+
+            return problems;
         }
     }
 }

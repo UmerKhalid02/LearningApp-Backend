@@ -4,6 +4,7 @@ using LearningApp.Application.Enums;
 using LearningApp.Application.Exceptions;
 using LearningApp.Application.Wrappers;
 using LearningApp.Data.Entities.ProblemEntity;
+using LearningApp.Data.IRepositories.ILessonRepository;
 using LearningApp.Data.IRepositories.IProblemRepository;
 
 namespace LearningApp.Web.Modules.Problems
@@ -13,7 +14,9 @@ namespace LearningApp.Web.Modules.Problems
         #region Private Methods
 
         private readonly IProblemRepository _problemRepository;
+        private readonly ILessonRepository _lessonRepository;
         private readonly IMapper _mapper;
+
         private bool DistinctChoicesKeys(List<UpdateChoiceRequestDTO> choiceDTO)
         {
             var distinct = choiceDTO.Select(c => c.ChoiceId).Distinct().Count() == choiceDTO.Count();
@@ -33,9 +36,10 @@ namespace LearningApp.Web.Modules.Problems
 
 
         #region Public Methods
-        public ProblemService(IProblemRepository problemRepository, IMapper mapper)
+        public ProblemService(IProblemRepository problemRepository, ILessonRepository lessonRepository, IMapper mapper)
         {
             _problemRepository = problemRepository;
+            _lessonRepository = lessonRepository;
             _mapper = mapper;
         }
 
@@ -43,6 +47,15 @@ namespace LearningApp.Web.Modules.Problems
         {
             // convert to pagination response
             var problems = await _problemRepository.GetAllProblems();
+            var response = _mapper.Map<List<ProblemResponseDTO>>(problems);
+
+            return new Response<List<ProblemResponseDTO>>(true, response, GeneralMessages.RecordFetched);
+        }
+        
+        public async Task<Response<List<ProblemResponseDTO>>> GetAllProblems(Guid userId)
+        {
+            // convert to pagination response
+            var problems = await _problemRepository.GetAllProblems(userId);
             var response = _mapper.Map<List<ProblemResponseDTO>>(problems);
 
             return new Response<List<ProblemResponseDTO>>(true, response, GeneralMessages.RecordFetched);
@@ -60,12 +73,12 @@ namespace LearningApp.Web.Modules.Problems
             return new Response<ProblemResponseDTO>(true, response, GeneralMessages.RecordFetched);
         }
 
-        public async Task<Response<ProblemResponseDTO>> AddProblem(AddProblemRequestDTO problemDto)
+        public async Task<Response<ProblemResponseDTO>> AddProblem(AddProblemRequestDTO problemDto, Guid creatorId)
         {
-            // check if topic exists
-            var topic = await _problemRepository.GetTopicById(problemDto.TopicId);
-            if (topic == null)
-                throw new KeyNotFoundException(GeneralMessages.InvalidTopicId);
+            // check if lesson exists
+            var lesson = await _lessonRepository.GetLessonById(problemDto.LessonId);
+            if (lesson == null)
+                throw new KeyNotFoundException(GeneralMessages.InvalidLessonId);
 
             // check problem type
             if(EProblemTypeExtensions.ProblemTypeIsInvalid(problemDto.Type))
@@ -83,6 +96,7 @@ namespace LearningApp.Web.Modules.Problems
             var problem = _mapper.Map<Problem>(problemDto);
             problem.IsActive = true;
             problem.CreatedAt = DateTime.UtcNow;
+            problem.CreatedBy = creatorId;
 
             if (problem.Choices != null && problem.Choices.Count > 0) {
 
@@ -97,7 +111,13 @@ namespace LearningApp.Web.Modules.Problems
                 {
                     choice.IsActive = true;
                     choice.CreatedAt = DateTime.UtcNow;
+                    choice.CreatedBy = creatorId;
                 }
+            }
+
+            foreach (var sol in problem.Solution)
+            {
+                sol.IsActive = true;
             }
 
             await _problemRepository.AddProblem(problem);
@@ -109,17 +129,17 @@ namespace LearningApp.Web.Modules.Problems
         // TODO: check if problem type is other than mcq/tf, then choices must not be provided
         // TODO: mapping is creating problems
 
-        public async Task<Response<ProblemResponseDTO>> UpdateProblem(Guid problemId, UpdateProblemRequestDTO problemDto)
+        public async Task<Response<ProblemResponseDTO>> UpdateProblem(Guid problemId, UpdateProblemRequestDTO problemDto, Guid userId)
         {
             // check if problem exists
             var problem = await _problemRepository.GetProblemById(problemId);
             if(problem == null)
                 throw new KeyNotFoundException(GeneralMessages.InvalidProblemId);
 
-            // check if topic exists
-            var topic = await _problemRepository.GetTopicById(problemDto.TopicId);
-            if (topic == null)
-                throw new KeyNotFoundException(GeneralMessages.InvalidTopicId);
+            // check if lesson exists
+            var lesson = await _lessonRepository.GetLessonById(problemDto.LessonId);
+            if (lesson == null)
+                throw new KeyNotFoundException(GeneralMessages.InvalidLessonId);
 
             // check problem type
             if (EProblemTypeExtensions.ProblemTypeIsInvalid(problemDto.Type))
@@ -166,6 +186,7 @@ namespace LearningApp.Web.Modules.Problems
 
                             choiceEntity.ChoiceText = choice.ChoiceText;
                             choiceEntity.UpdatedAt = DateTime.UtcNow;
+                            choice.UpdatedBy = userId;
                             choices.Add(choiceEntity);
                         }
                         else
@@ -189,6 +210,7 @@ namespace LearningApp.Web.Modules.Problems
                         choice.ChoiceId = Guid.NewGuid();
                         choice.IsActive = true;
                         choice.CreatedAt = DateTime.UtcNow;
+                        choice.CreatedBy = userId;
                     }
                     await _problemRepository.AddChoicesForProblem(problem.Choices);
                 }
@@ -209,6 +231,7 @@ namespace LearningApp.Web.Modules.Problems
                     choice.ChoiceId = Guid.NewGuid();
                     choice.IsActive = true;
                     choice.CreatedAt = DateTime.UtcNow;
+                    choice.CreatedBy = userId;
                 }
                 await _problemRepository.AddChoicesForProblem(problem.Choices);
             }
@@ -218,13 +241,21 @@ namespace LearningApp.Web.Modules.Problems
                 _mapper.Map(problemDto, problem);
             }
 
+            // remove solution, then add new solutions
+            foreach (var solution in problem.Solution) {
+                solution.IsActive = true;
+            }
+
+            problem.UpdatedAt = DateTime.UtcNow;
+            problem.UpdatedBy = userId;
+
             //_problemRepository.UpdateProblem(problem);
             await _problemRepository.SaveChangesAsync();
 
             return new Response<ProblemResponseDTO>(true, null, GeneralMessages.RecordUpdated);
         }
 
-        public async Task<Response<bool>> DeleteProblem(Guid problemId)
+        public async Task<Response<bool>> DeleteProblem(Guid problemId, Guid userId)
         {
             var problem = await _problemRepository.GetProblemById(problemId);
             if(problem == null)
@@ -233,6 +264,7 @@ namespace LearningApp.Web.Modules.Problems
             problem.IsActive = false;
             problem.UpdatedAt = DateTime.UtcNow;
             problem.DeletedAt = DateTime.UtcNow;
+            problem.DeletedBy = userId;
 
             // delete all choices
             if (problem.Choices != null && problem.Choices.Count > 0)
@@ -242,6 +274,7 @@ namespace LearningApp.Web.Modules.Problems
                     choice.IsActive = false;
                     choice.UpdatedAt = DateTime.UtcNow;
                     choice.DeletedAt = DateTime.UtcNow;
+                    choice.DeletedBy = userId;
                 }
             }
 
@@ -253,6 +286,19 @@ namespace LearningApp.Web.Modules.Problems
             {
                 throw new InternalServerErrorException(e.Message);
             }
+        }
+
+        public async Task<Response<List<ProblemResponseDTO>>> GetProblemsByLessonId(Guid lessonId)
+        {
+            // check if lesson exists
+            var lesson = await _lessonRepository.GetLessonById(lessonId);
+            if (lesson == null)
+                throw new KeyNotFoundException(GeneralMessages.InvalidTopicId);
+
+            var problems = await _problemRepository.GetProblemsLessonId(lessonId);
+            var problemResponse = _mapper.Map<List<ProblemResponseDTO>>(problems);
+
+            return new Response<List<ProblemResponseDTO>>(true, problemResponse, GeneralMessages.RecordFetched);
         }
         #endregion
     }

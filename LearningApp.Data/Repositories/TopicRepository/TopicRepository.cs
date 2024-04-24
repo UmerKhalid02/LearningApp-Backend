@@ -14,13 +14,25 @@ namespace LearningApp.Data.Repositories.TopicRepository
 
         public async Task<List<Topic>> GetAllTopics()
         {
-            var topics = await _context.Topics.Where(x => x.IsActive).ToListAsync();
+            var topics = await _context.Topics
+                .Include(x => x.Lessons.Where(l => l.IsActive))
+                .Where(x => x.IsActive).ToListAsync();
+            return topics;
+        }
+
+        public async Task<List<Topic>> GetAllTopics(Guid userId)
+        {
+            var topics = await _context.Topics
+                .Include(x => x.Lessons.Where(l => l.IsActive))
+                .Where(x => x.IsActive && x.CreatedBy == userId).ToListAsync();
             return topics;
         }
 
         public async Task<Topic> GetTopicById(Guid topicId)
         {
-            var topic = await _context.Topics.FirstOrDefaultAsync(x => x.TopicId == topicId && x.IsActive);
+            var topic = await _context.Topics
+                .Include(x => x.Lessons.Where(l => l.IsActive))
+                .FirstOrDefaultAsync(x => x.TopicId == topicId && x.IsActive);
             return topic;
         }
 
@@ -42,6 +54,10 @@ namespace LearningApp.Data.Repositories.TopicRepository
             await _context.SaveChangesAsync();
         }
 
-        
+        public async Task<bool> DeleteTopic(Topic topic)
+        {
+            _context.Topics.Remove(topic);
+            return true;
+        }
     }
 }

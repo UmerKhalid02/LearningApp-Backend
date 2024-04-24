@@ -20,7 +20,7 @@ namespace LearningApp.Web
         {
             services.AddApplicationLayer();
 
-            // setup vercel
+            // vercel setup
             Vercel.BaseUrl = Configuration["Vercel:BaseUrl"];
             Vercel.AccessToken = Configuration["Vercel:ACCESS_TOKEN"];
 
@@ -31,11 +31,21 @@ namespace LearningApp.Web
             services.AddDbContext<EFDataContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ConnectionStringMssql")));
 
-            services.AddAuthentication();
-            services.AddAuthorization();
+            // settings for JWT Secret Key
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = System.Text.Encoding.ASCII.GetBytes(appSettings.Secret);
+
+            services.AddJwtTokenAuthentication(Configuration, key);
+            services.AddHttpContextAccessor();
+
+            // quartz setup
+            services.AddQuartzConfig();
 
             services.AddCors();
             services.AddServicesConfig();
+            services.AddSwaggerConfiguration();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +58,7 @@ namespace LearningApp.Web
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LearningApp.Web v1"));
             }
 
+            app.UseSwaggerSetup();
             app.UseRouting();
 
             // -- Setup Cors here 
@@ -55,15 +66,19 @@ namespace LearningApp.Web
                 .WithOrigins(
                 "http://127.0.0.1:8000",
                 "http://127.0.0.1:8001",
+                "http://127.0.0.1:8081",
                 "http://127.0.0.1:5000",
                 "http://127.0.0.1:5173",
                 "http://localhost:5173",
+                "http://127.0.0.1:5500",
+                "http://127.0.0.1",
                 "http://localhost")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());
 
             app.UseMiddleware<ErrorHandlerMiddleware>();
+            app.UseMiddleware<AuthorizationMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
 

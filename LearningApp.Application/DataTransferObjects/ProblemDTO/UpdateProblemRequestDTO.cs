@@ -6,7 +6,7 @@ namespace LearningApp.Application.DataTransferObjects.ProblemDTO
     public class UpdateProblemRequestDTO
     {
         [Required]
-        public Guid TopicId { get; set; }
+        public Guid LessonId { get; set; }
         [Required]
         public string? Description { get; set; }
         [AllowNull]
@@ -16,7 +16,7 @@ namespace LearningApp.Application.DataTransferObjects.ProblemDTO
         [Required]
         public string? Difficulty { get; set; }
         [Required]
-        public string? Solution { get; set; }
+        public List<SolutionRequestDTO>? Solution { get; set; }
         public List<UpdateChoiceRequestDTO>? Choices { get; set; }
     }
 

@@ -5,7 +5,6 @@ using LearningApp.Application.Exceptions;
 using LearningApp.Application.Wrappers;
 using LearningApp.Data.Entities.ProblemEntity;
 using LearningApp.Data.IRepositories.ITopicRepository;
-using MediatR;
 
 namespace LearningApp.Web.Modules.Topics
 {
@@ -31,6 +30,17 @@ namespace LearningApp.Web.Modules.Topics
             return new Response<List<TopicResponseDTO>>(true, response, GeneralMessages.RecordFetched);
         }
 
+        public async Task<Response<List<TopicResponseDTO>>> GetAllTopics(Guid userId)
+        {
+            var topics = await _topicRepository.GetAllTopics(userId);
+
+            if (topics == null)
+                return new Response<List<TopicResponseDTO>>(true, null, GeneralMessages.TopicsNotAdded);
+
+            var response = _mapper.Map<List<TopicResponseDTO>>(topics);
+            return new Response<List<TopicResponseDTO>>(true, response, GeneralMessages.RecordFetched);
+        }
+
         public async Task<Response<TopicResponseDTO>> GetTopicById(Guid topicId)
         {
             var topic = await _topicRepository.GetTopicById(topicId);
@@ -42,7 +52,7 @@ namespace LearningApp.Web.Modules.Topics
             return new Response<TopicResponseDTO>(true, response, GeneralMessages.RecordFetched);
         }
 
-        public async Task<Response<TopicResponseDTO>> CreateTopic(TopicRequestDTO request)
+        public async Task<Response<TopicResponseDTO>> CreateTopic(TopicRequestDTO request, Guid userId)
         {
             // check if topic with this name already exists
             var topic = await _topicRepository.GetTopicByName(request.TopicName);
@@ -53,7 +63,8 @@ namespace LearningApp.Web.Modules.Topics
             {
                 TopicName = request.TopicName,
                 IsActive = true,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+                CreatedBy = userId
             };
 
             await _topicRepository.CreateTopic(newTopic);
@@ -62,7 +73,7 @@ namespace LearningApp.Web.Modules.Topics
             return new Response<TopicResponseDTO>(true, null, GeneralMessages.RecordAdded);
         }
 
-        public async Task<Response<TopicResponseDTO>> UpdateTopic(Guid topicId, TopicRequestDTO request)
+        public async Task<Response<TopicResponseDTO>> UpdateTopic(Guid topicId, TopicRequestDTO request, Guid userId)
         {
             var topic = await _topicRepository.GetTopicById(topicId);
             if (topic == null)
@@ -76,20 +87,25 @@ namespace LearningApp.Web.Modules.Topics
 
             topic.TopicName = request.TopicName;
             topic.UpdatedAt = DateTime.Now;
+            topic.UpdatedBy = userId;
 
             await _topicRepository.SaveChanges();
 
             return new Response<TopicResponseDTO>(true, null, GeneralMessages.RecordUpdated);
         }
 
-        public async Task<Response<bool>> DeleteTopic(Guid topicId)
+        public async Task<Response<bool>> DeleteTopic(Guid topicId, Guid userId)
         {
             var topic = await _topicRepository.GetTopicById(topicId);
             if (topic == null)
                 throw new KeyNotFoundException(GeneralMessages.RecordNotFound);
 
+            // also remove respective lessons and their respective problems
+            await _topicRepository.DeleteTopic(topic);
+            
             topic.UpdatedAt = DateTime.Now;
             topic.DeletedAt = DateTime.Now;
+            topic.DeletedBy = userId;
             topic.IsActive = false;
 
             await _topicRepository.SaveChanges();

@@ -1,5 +1,7 @@
 ﻿using LearningApp.Application.DataTransferObjects.TopicDTO;
 using LearningApp.Web.Modules.Common;
+using LearningApp.Web.Modules.Lessons;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningApp.Web.Modules.Topics
@@ -8,45 +10,69 @@ namespace LearningApp.Web.Modules.Topics
     public class TopicController : BaseController
     {
         private readonly ITopicService _topicService;
-        public TopicController(ITopicService topicService)
+        private readonly ILessonService _lessonService;
+        public TopicController(ITopicService topicService, ILessonService lessonService)
         {
             _topicService = topicService;
+            _lessonService = lessonService;
         }
 
-        [HttpGet]
+        [Authorize(Roles = "AD, ST, TR")]
+        [HttpGet("topics")]
         public async Task<IActionResult> GetAllTopics()
         {
             var response = await _topicService.GetAllTopics();
             return Ok(response);
         }
 
-        [HttpGet("{topicId}")]
+        [Authorize(Roles = "AD, ST, TR")]
+        [HttpGet("topics/{topicId}")]
         public async Task<IActionResult> GetTopicById(Guid topicId)
         {
             var response = await _topicService.GetTopicById(topicId);
             return Ok(response);
         }
 
+        [Authorize(Roles = "AD, ST, TR")]
+        [HttpGet("topics/{topicId}/lessons")]
+        public async Task<IActionResult> GetAllLessonsByTopicId(Guid topicId)
+        {
+            return Ok(await _lessonService.GetAllLessonsByTopicId(topicId));
+        }
 
+        [Authorize(Roles = "AD, TR")]
         [HttpPost]
         public async Task<IActionResult> CreateTopic([FromBody] TopicRequestDTO request)
         {
-            var response = await _topicService.CreateTopic(request);
+            var userId = this.GetUserId();
+            var response = await _topicService.CreateTopic(request, userId);
             return Ok(response);
         }
 
-
-        [HttpPut("{topicId}")]
+        [Authorize(Roles = "AD, TR")]
+        [HttpPut("topics/{topicId}")]
         public async Task<IActionResult> UpdateTopic(Guid topicId, [FromBody] TopicRequestDTO request)
         {
-            var response = await _topicService.UpdateTopic(topicId, request);
+            var userId = this.GetUserId();
+            var response = await _topicService.UpdateTopic(topicId, request, userId);
             return Ok(response);
         }
-        
-        [HttpDelete("{topicId}")]
+
+        [Authorize(Roles = "AD, TR")]
+        [HttpDelete("topics/{topicId}")]
         public async Task<IActionResult> DeleteTopic(Guid topicId)
         {
-            var response = await _topicService.DeleteTopic(topicId);
+            var userId = this.GetUserId();
+            var response = await _topicService.DeleteTopic(topicId, userId);
+            return Ok(response);
+        }
+
+        // topics created by specific user/teacher 
+        [Authorize(Roles = "AD, TR")]
+        [HttpGet("users/{userId}/topics")]
+        public async Task<IActionResult> GetAllUserCreatedTopics(Guid userId)
+        {
+            var response = await _topicService.GetAllTopics(userId);
             return Ok(response);
         }
     }

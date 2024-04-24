@@ -18,14 +18,14 @@ namespace LearningApp.Data.Entities.ProblemEntity
         public string? Type { get; set; }
         [Required]
         public string? Difficulty { get; set; }
-        [Required]
-        public string? Solution { get; set; }
 
-        [Column("TopicID")]
-        [ForeignKey("TopicId")]
+        [Column("LessonID")]
+        [ForeignKey("LessonId")]
         [Required]
-        public virtual Guid TopicId { get; set; }
-        public virtual Topic Topic { get; set; }
+        public Guid LessonId { get; set; }
+        public virtual Lesson Lesson { get; set; }
+
+        public virtual ICollection<Solution> Solution { get; set; }
         public virtual ICollection<Choice>? Choices { get; set; }
     }
 }
