@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LearningApp.Application.DataTransferObjects.LessonDTO;
 using LearningApp.Application.DataTransferObjects.TopicDTO;
 using LearningApp.Application.Enums;
 using LearningApp.Application.Exceptions;
@@ -112,6 +113,17 @@ namespace LearningApp.Web.Modules.Topics
 
             return new Response<bool>(true, true, GeneralMessages.RecordDeleted);
 
+        }
+
+        public async Task<Response<List<LessonResponseDTO>>> GetAllUserCreatedLessonsByTopicId(Guid userId, Guid topicId)
+        {
+            var lessons = await _topicRepository.GetAllUserCreatedLessonsByTopicId(userId, topicId);
+
+            if (lessons == null)
+                return new Response<List<LessonResponseDTO>>(true, null, GeneralMessages.TopicsNotAdded);
+
+            var response = _mapper.Map<List<LessonResponseDTO>>(lessons);
+            return new Response<List<LessonResponseDTO>>(true, response, GeneralMessages.RecordFetched);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace LearningApp.Web.Modules.Score
             _scoreService = scoreService;
         }
 
-        [Authorize(Roles = "ST, TR")]
+        [Authorize(Roles = "AD, ST, TR")]
         [HttpPost]
         public async Task<IActionResult> CalculateScore([FromBody] CalculateScoreRequestDTO request)
         {
