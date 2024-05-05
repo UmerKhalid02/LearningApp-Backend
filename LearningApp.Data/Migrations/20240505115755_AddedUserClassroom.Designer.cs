@@ -4,6 +4,7 @@ using LearningApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningApp.Data.Migrations
 {
     [DbContext(typeof(EFDataContext))]
-    partial class EFDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240505115755_AddedUserClassroom")]
+    partial class AddedUserClassroom
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,7 +168,8 @@ namespace LearningApp.Data.Migrations
 
                     b.HasIndex("ClassroomId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("UserClassroom", "edu");
                 });
@@ -623,8 +626,8 @@ namespace LearningApp.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("LearningApp.Data.Entities.UserEntity.User", "User")
-                        .WithMany("UserClassroom")
-                        .HasForeignKey("UserId")
+                        .WithOne("UserClassroom")
+                        .HasForeignKey("LearningApp.Data.Entities.ClassroomEntity.UserClassroom", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
