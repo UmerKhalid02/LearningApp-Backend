@@ -21,6 +21,7 @@ namespace LearningApp.Data
         public DbSet<Solution> Solutions { get; set; }
         public DbSet<UserLogin> UserLogin { get; set; }
         public DbSet<UserLoginTime> UserLoginTime { get; set; }
+        public DbSet<UserProgress> UserProgress { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

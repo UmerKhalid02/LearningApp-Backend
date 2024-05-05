@@ -4,12 +4,14 @@ using LearningApp.Data.IRepositories.ILeaderboardRepository;
 using LearningApp.Data.IRepositories.ILessonRepository;
 using LearningApp.Data.IRepositories.IProblemRepository;
 using LearningApp.Data.IRepositories.ITopicRepository;
+using LearningApp.Data.IRepositories.IUserProgressRepository;
 using LearningApp.Data.Repositories.AuthenticationRepository;
 using LearningApp.Data.Repositories.DashboardRepository;
 using LearningApp.Data.Repositories.LeaderboardRepository;
 using LearningApp.Data.Repositories.LessonRepository;
 using LearningApp.Data.Repositories.ProblemRepository;
 using LearningApp.Data.Repositories.TopicRepository;
+using LearningApp.Data.Repositories.UserProgressRepository;
 using LearningApp.Web.Modules.Authentication;
 using LearningApp.Web.Modules.Dashboard;
 using LearningApp.Web.Modules.Languages.Python;
@@ -48,6 +50,7 @@ namespace LearningApp.Web.Extensions
             services.AddScoped<IDashboardRepository, DashboardRepository>();
 
             services.AddScoped<IScoreService, ScoreService>();
+            services.AddScoped<IUserProgressRepository, UserProgressRepository>();
 
             return services;
         }
