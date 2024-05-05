@@ -6,6 +6,7 @@
         public string ClassroomName { get; set; }
         public int TotalStudents { get; set; }
         public List<Student> Students { get; set;}
+        public Guid CreatedBy { get; set; }
     }
 
     public class Student

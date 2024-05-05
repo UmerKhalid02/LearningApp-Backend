@@ -10,5 +10,6 @@ namespace LearningApp.Web.Modules.Classrooms
         Task<Response<ClassroomResponseDTO>> AddClassroom(Guid userId, AddClassroomRequestDTO requestDTO);
         Task<Response<ClassroomResponseDTO>> UpdateClassroom(Guid userId, Guid classroomId, AddClassroomRequestDTO requestDTO);
         Task<Response<bool>> DeleteClassroom(Guid userId, Guid classroomId);
+        Task<Response<List<ClassroomResponseDTO>>> GetAllUserClassrooms(Guid userId, string userRole);
     }
 }

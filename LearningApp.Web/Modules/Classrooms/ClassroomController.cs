@@ -22,10 +22,13 @@ namespace LearningApp.Web.Modules.Classrooms
             return Ok(response);
         }
 
-        [Authorize(Roles = "AD, TR")]
+        [Authorize(Roles = "AD, TR, ST")]
         [HttpGet("{classroomId}")]
         public async Task<IActionResult> GetClassroomById(Guid classroomId)
         {
+            var userRole = GetUserRole();
+            var userId = GetUserId();
+
             var response = await _classroomService.GetClassroomById(classroomId);
             return Ok(response);
         }
@@ -57,6 +60,18 @@ namespace LearningApp.Web.Modules.Classrooms
             var response = await _classroomService.DeleteClassroom(userId, classroomId);
             return Ok(response);
         }
+
+        // show all classrooms of specific user (teacher)
+        [Authorize(Roles = "AD, TR, ST")]
+        [HttpGet("user")]
+        public async Task<IActionResult> GetAllUserClassrooms()
+        {
+            var userId = GetUserId();
+            var userRole = GetUserRole();
+            var response = await _classroomService.GetAllUserClassrooms(userId, userRole);
+            return Ok(response);
+        }
+
 
     }
 }
