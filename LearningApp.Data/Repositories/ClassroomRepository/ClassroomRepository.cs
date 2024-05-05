@@ -41,5 +41,26 @@ namespace LearningApp.Data.Repositories.ClassroomRepository
         {
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Classroom>> GetAllStudentClassrooms(Guid userId)
+        {
+            var classrooms = await _context.Classrooms
+                .Include(x => x.UserClassrooms).ThenInclude(u => u.User)
+                .Where(x => x.UserClassrooms.Any(u => u.UserId == userId))
+                .Where(x => x.IsActive)
+                .ToListAsync();
+
+            return classrooms;
+        }
+
+        public async Task<List<Classroom>> GetAllTeacherClassrooms(Guid userId)
+        {
+            var classrooms = await _context.Classrooms
+                .Include(x => x.UserClassrooms).ThenInclude(u => u.User)
+                .Where(x => x.CreatedBy == userId && x.IsActive)
+                .ToListAsync();
+            
+            return classrooms;
+        }
     }
 }

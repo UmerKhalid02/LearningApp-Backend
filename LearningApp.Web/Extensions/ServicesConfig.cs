@@ -6,6 +6,7 @@ using LearningApp.Data.IRepositories.ILessonRepository;
 using LearningApp.Data.IRepositories.IProblemRepository;
 using LearningApp.Data.IRepositories.ITopicRepository;
 using LearningApp.Data.IRepositories.IUserProgressRepository;
+using LearningApp.Data.IRepositories.IUserRepository;
 using LearningApp.Data.Repositories.AuthenticationRepository;
 using LearningApp.Data.Repositories.ClassroomRepository;
 using LearningApp.Data.Repositories.DashboardRepository;
@@ -14,6 +15,7 @@ using LearningApp.Data.Repositories.LessonRepository;
 using LearningApp.Data.Repositories.ProblemRepository;
 using LearningApp.Data.Repositories.TopicRepository;
 using LearningApp.Data.Repositories.UserProgressRepository;
+using LearningApp.Data.Repositories.UserRepository;
 using LearningApp.Web.Modules.Authentication;
 using LearningApp.Web.Modules.Classrooms;
 using LearningApp.Web.Modules.Dashboard;
@@ -34,6 +36,7 @@ namespace LearningApp.Web.Extensions
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddScoped<IProblemService, ProblemService>();
             services.AddScoped<IProblemRepository, ProblemRepository>();
