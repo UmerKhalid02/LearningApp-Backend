@@ -80,10 +80,10 @@ namespace LearningApp.Web.Middlewares
                 claims.AddClaims(principal.Claims);
                 await _next(context);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                await context.Response.WriteAsJsonAsync(new Response<dynamic>(false, "Unauthorized"));
+                await context.Response.WriteAsJsonAsync(new Response<dynamic>(false, ex.Message));
                 return;
             }
         }

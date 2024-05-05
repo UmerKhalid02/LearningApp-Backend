@@ -1,5 +1,6 @@
 ﻿using LearningApp.Data.Entities;
 using LearningApp.Data.Entities.AuthenticationEntity;
+using LearningApp.Data.Entities.ClassroomEntity;
 using LearningApp.Data.Entities.ProblemEntity;
 using LearningApp.Data.Entities.UserEntity;
 using LearningApp.Data.Seeders;
@@ -21,6 +22,9 @@ namespace LearningApp.Data
         public DbSet<Solution> Solutions { get; set; }
         public DbSet<UserLogin> UserLogin { get; set; }
         public DbSet<UserLoginTime> UserLoginTime { get; set; }
+        public DbSet<UserProgress> UserProgress { get; set; }
+        public DbSet<Classroom> Classrooms { get; set; }
+        public DbSet<UserClassroom> UserClassrooms { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

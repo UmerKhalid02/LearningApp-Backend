@@ -36,7 +36,8 @@ namespace LearningApp.Web.Modules.Lessons
         [HttpGet("lessons/{id}")]
         public async Task<IActionResult> GetLessonById(Guid id)
         {
-            return Ok(await _lessonService.GetLessonById(id));
+            var response = await _lessonService.GetLessonById(id);
+            return Ok(response);
         }
 
         [Authorize(Roles = "AD, TR")]

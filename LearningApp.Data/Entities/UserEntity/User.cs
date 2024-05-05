@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using LearningApp.Data.Entities.ClassroomEntity;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -27,5 +28,6 @@ namespace LearningApp.Data.Entities.UserEntity
         public int Level { get; set; } = 1;
         [Required]
         public virtual UserRole? UserRole { get; set; }
+        public virtual ICollection<UserClassroom>? UserClassroom { get; set; }
     }
 }

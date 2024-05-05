@@ -4,6 +4,7 @@ using LearningApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningApp.Data.Migrations
 {
     [DbContext(typeof(EFDataContext))]
-    partial class EFDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240503103547_UserProgress_LessonIdAllowNulls")]
+    partial class UserProgress_LessonIdAllowNulls
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,88 +89,6 @@ namespace LearningApp.Data.Migrations
                             IsActive = true,
                             RoleName = "TR"
                         });
-                });
-
-            modelBuilder.Entity("LearningApp.Data.Entities.ClassroomEntity.Classroom", b =>
-                {
-                    b.Property<Guid>("ClassroomId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ClassroomID");
-
-                    b.Property<string>("ClassroomName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ClassroomId");
-
-                    b.ToTable("Classroom", "edu");
-                });
-
-            modelBuilder.Entity("LearningApp.Data.Entities.ClassroomEntity.UserClassroom", b =>
-                {
-                    b.Property<Guid>("UserClassroomId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("UserClassroomID");
-
-                    b.Property<Guid>("ClassroomId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ClassroomID");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("UserID");
-
-                    b.HasKey("UserClassroomId");
-
-                    b.HasIndex("ClassroomId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserClassroom", "edu");
                 });
 
             modelBuilder.Entity("LearningApp.Data.Entities.ProblemEntity.Choice", b =>
@@ -614,25 +534,6 @@ namespace LearningApp.Data.Migrations
                     b.ToTable("UserLoginTime", "edu");
                 });
 
-            modelBuilder.Entity("LearningApp.Data.Entities.ClassroomEntity.UserClassroom", b =>
-                {
-                    b.HasOne("LearningApp.Data.Entities.ClassroomEntity.Classroom", "Classroom")
-                        .WithMany("UserClassrooms")
-                        .HasForeignKey("ClassroomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LearningApp.Data.Entities.UserEntity.User", "User")
-                        .WithMany("UserClassroom")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Classroom");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("LearningApp.Data.Entities.ProblemEntity.Choice", b =>
                 {
                     b.HasOne("LearningApp.Data.Entities.ProblemEntity.Problem", null)
@@ -723,11 +624,6 @@ namespace LearningApp.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("LearningApp.Data.Entities.ClassroomEntity.Classroom", b =>
-                {
-                    b.Navigation("UserClassrooms");
-                });
-
             modelBuilder.Entity("LearningApp.Data.Entities.ProblemEntity.Lesson", b =>
                 {
                     b.Navigation("Problems");
@@ -747,8 +643,6 @@ namespace LearningApp.Data.Migrations
 
             modelBuilder.Entity("LearningApp.Data.Entities.UserEntity.User", b =>
                 {
-                    b.Navigation("UserClassroom");
-
                     b.Navigation("UserRole")
                         .IsRequired();
                 });

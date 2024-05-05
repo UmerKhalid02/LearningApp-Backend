@@ -47,5 +47,8 @@
         public const string UserLogoutFailMessage = "Logged out fail.";
         public const string UserLoginFail = "Invalid username/email or password";
         public const string UnauthorizedAccess = "You are not authorized";
+
+
+        public const string InvalidClassroomId = "Invalid Classroom Id";
     }
 }

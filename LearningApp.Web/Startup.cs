@@ -77,8 +77,8 @@ namespace LearningApp.Web
                 .AllowAnyHeader()
                 .AllowCredentials());
 
-            app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseMiddleware<AuthorizationMiddleware>();
+            app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
 
