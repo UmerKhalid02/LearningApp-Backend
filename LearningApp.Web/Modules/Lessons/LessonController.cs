@@ -25,7 +25,7 @@ namespace LearningApp.Web.Modules.Lessons
         }
 
         [Authorize(Roles = "AD, ST, TR")]
-        [HttpGet("{lessonId}/problems")]
+        [HttpGet("lessons/{lessonId}/problems")]
         public async Task<IActionResult> GetProblemsByLessonId(Guid lessonId)
         {
             var response = await _problemService.GetProblemsByLessonId(lessonId);
@@ -36,7 +36,8 @@ namespace LearningApp.Web.Modules.Lessons
         [HttpGet("lessons/{id}")]
         public async Task<IActionResult> GetLessonById(Guid id)
         {
-            return Ok(await _lessonService.GetLessonById(id));
+            var response = await _lessonService.GetLessonById(id);
+            return Ok(response);
         }
 
         [Authorize(Roles = "AD, TR")]
@@ -65,7 +66,7 @@ namespace LearningApp.Web.Modules.Lessons
 
         // lessons created by specific user/teacher 
         [Authorize(Roles = "AD, TR")]
-        [HttpGet("users/{userId}/lessons")]
+        [HttpGet("lessons/users/{userId}")]
         public async Task<IActionResult> GetAllUserCreatedLessons(Guid userId)
         {
             return Ok(await _lessonService.GetAllLessons(userId));

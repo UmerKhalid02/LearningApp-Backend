@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LearningApp.Web.Modules.Topics
 {
-    [Route("api/v1/topics")]
+    [Route("api/v1")]
     public class TopicController : BaseController
     {
         private readonly ITopicService _topicService;
@@ -41,7 +41,7 @@ namespace LearningApp.Web.Modules.Topics
         }
 
         [Authorize(Roles = "AD, TR")]
-        [HttpPost]
+        [HttpPost("topics")]
         public async Task<IActionResult> CreateTopic([FromBody] TopicRequestDTO request)
         {
             var userId = this.GetUserId();
@@ -69,10 +69,18 @@ namespace LearningApp.Web.Modules.Topics
 
         // topics created by specific user/teacher 
         [Authorize(Roles = "AD, TR")]
-        [HttpGet("users/{userId}/topics")]
+        [HttpGet("topics/users/{userId}")]
         public async Task<IActionResult> GetAllUserCreatedTopics(Guid userId)
         {
             var response = await _topicService.GetAllTopics(userId);
+            return Ok(response);
+        }
+
+        [Authorize(Roles = "AD, TR")]
+        [HttpGet("topics/{topicId}/lessons/users/{userId}")]
+        public async Task<IActionResult> GetAllUserCreatedLessonsByTopicId(Guid userId, Guid topicId)
+        {
+            var response = await _topicService.GetAllUserCreatedLessonsByTopicId(userId, topicId);
             return Ok(response);
         }
     }

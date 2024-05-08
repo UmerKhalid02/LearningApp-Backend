@@ -4,6 +4,7 @@ using LearningApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningApp.Data.Migrations
 {
     [DbContext(typeof(EFDataContext))]
-    partial class EFDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240505132148_UserClassroomFixed")]
+    partial class UserClassroomFixed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,12 +97,6 @@ namespace LearningApp.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("ClassroomID");
-
-                    b.Property<string>("ClassroomCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClassroomDescription")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClassroomName")
                         .IsRequired()
@@ -351,10 +347,6 @@ namespace LearningApp.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("TopicID");
 
-                    b.Property<Guid?>("ClassroomId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ClassroomID");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -381,8 +373,6 @@ namespace LearningApp.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("TopicId");
-
-                    b.HasIndex("ClassroomId");
 
                     b.ToTable("Topic", "edu");
                 });
@@ -685,15 +675,6 @@ namespace LearningApp.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LearningApp.Data.Entities.ProblemEntity.Topic", b =>
-                {
-                    b.HasOne("LearningApp.Data.Entities.ClassroomEntity.Classroom", "Classroom")
-                        .WithMany("Topics")
-                        .HasForeignKey("ClassroomId");
-
-                    b.Navigation("Classroom");
-                });
-
             modelBuilder.Entity("LearningApp.Data.Entities.UserEntity.UserProgress", b =>
                 {
                     b.HasOne("LearningApp.Data.Entities.ProblemEntity.Lesson", "Lesson")
@@ -746,8 +727,6 @@ namespace LearningApp.Data.Migrations
 
             modelBuilder.Entity("LearningApp.Data.Entities.ClassroomEntity.Classroom", b =>
                 {
-                    b.Navigation("Topics");
-
                     b.Navigation("UserClassrooms");
                 });
 

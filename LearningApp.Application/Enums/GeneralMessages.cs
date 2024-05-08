@@ -47,5 +47,13 @@
         public const string UserLogoutFailMessage = "Logged out fail.";
         public const string UserLoginFail = "Invalid username/email or password";
         public const string UnauthorizedAccess = "You are not authorized";
+
+
+        public const string InvalidClassroomId = "Invalid Classroom Id";
+        public const string TopicAddedInClassroom = "Topic successfully added in classroom";
+        public const string OnlyStudentsCanJoinClassroom = "Unauthorized. only students can join classroom";
+        public const string InvalidClassroomCode = "Invalid classroom code";
+        public const string UserAlreadyEnrolled = "You are already enrolled in this classroom";
+        public const string UserEnrolled = "You are now enrolled in this classroom";
     }
 }

@@ -59,5 +59,20 @@ namespace LearningApp.Data.Repositories.TopicRepository
             _context.Topics.Remove(topic);
             return true;
         }
+
+        public async Task<List<Lesson>> GetAllUserCreatedLessonsByTopicId(Guid userId, Guid topicId)
+        {
+            var lessons = await _context.Lessons
+                .Include(x => x.Topic)
+                .Include(x => x.Problems.Where(p => p.IsActive)).ThenInclude(p => p.Choices.Where(c => c.IsActive))
+                .Where(x => x.IsActive && x.CreatedBy == userId && x.TopicId == topicId).ToListAsync();
+            return lessons;
+        }
+
+        public Task<Topic?> GetTeacherTopicById(Guid userId, Guid topicId)
+        {
+            var topic = _context.Topics.FirstOrDefaultAsync(x => x.TopicId == topicId && x.CreatedBy == userId && x.IsActive);
+            return topic;
+        }
     }
 }
