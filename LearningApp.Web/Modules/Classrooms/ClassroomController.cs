@@ -61,7 +61,7 @@ namespace LearningApp.Web.Modules.Classrooms
             return Ok(response);
         }
 
-        // show all classrooms of specific user (teacher)
+        // show all classrooms of specific user (teacher/student)
         [Authorize(Roles = "AD, TR, ST")]
         [HttpGet("user")]
         public async Task<IActionResult> GetAllUserClassrooms()
@@ -72,6 +72,24 @@ namespace LearningApp.Web.Modules.Classrooms
             return Ok(response);
         }
 
+        [Authorize(Roles = "AD, TR")]
+        [HttpPost("{classroomId}/topics/{topicId}")]
+        public async Task<IActionResult> AddTopicInClassroom(Guid classroomId, Guid topicId)
+        {
+            var userId = GetUserId();
+            var response = await _classroomService.AddTopicInClassroom(userId, classroomId, topicId);
+            return Ok(response);
+        }
 
+        // join classroom using classcode
+        [Authorize(Roles = "AD, ST")]
+        [HttpPost("join")]
+        public async Task<IActionResult> JoinClassroom(JoinClassroomRequestDTO request)
+        {
+            var userId = GetUserId();
+            var userRole = GetUserRole();
+            var response = await _classroomService.JoinClassroom(userId, userRole, request);
+            return Ok(response);
+        }
     }
 }

@@ -62,5 +62,29 @@ namespace LearningApp.Data.Repositories.ClassroomRepository
             
             return classrooms;
         }
+
+        public async Task<Classroom?> GetClassroomByCode(string code)
+        {
+            var classroom = await _context.Classrooms.FirstOrDefaultAsync(x => x.ClassroomCode == code && x.IsActive);
+            return classroom;
+        }
+
+        public async Task<Classroom?> GetTeacherClassroomById(Guid userId, Guid classroomId)
+        {
+            var classroom = await _context.Classrooms.FirstOrDefaultAsync(x => x.ClassroomId == classroomId && x.CreatedBy == userId && x.IsActive);
+            return classroom;
+        }
+
+        public async Task<UserClassroom?> CheckStudentInClassroom(Guid studentId, Guid classroomId)
+        {
+            var userClassroom = await _context.UserClassrooms.FirstOrDefaultAsync(x => x.UserId == studentId && x.ClassroomId == classroomId && x.IsActive);
+            return userClassroom;
+        }
+
+        public async Task<UserClassroom> AddUserInClassroom(UserClassroom userClassroom)
+        {
+            await _context.UserClassrooms.AddAsync(userClassroom);
+            return userClassroom;
+        }
     }
 }
