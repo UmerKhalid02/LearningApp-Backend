@@ -50,12 +50,13 @@ namespace LearningApp.Web.Modules.Dashboard
             }
 
             // multplier handler
-            if (role == RolesKey.ST && userLoginTime.LoginAt != null)
+            if ((role == RolesKey.ST || role == RolesKey.TR) && userLoginTime.LoginAt != null)
             {
                 await UserMultiplierHandler(userLoginTime.User, userLoginTime);
             }
 
             DashboardResponseDTO responseDTO = _mapper.Map<DashboardResponseDTO>(user);
+            responseDTO.Role = role;
             
             return new Response<DashboardResponseDTO>(true, responseDTO, "Dashboard Response");
         }
