@@ -68,5 +68,11 @@ namespace LearningApp.Data.Repositories.ClassroomRepository
             var classroom = await _context.Classrooms.FirstOrDefaultAsync(x => x.ClassroomCode == code && x.IsActive);
             return classroom;
         }
+
+        public async Task<Classroom?> GetTeacherClassroomById(Guid userId, Guid classroomId)
+        {
+            var classroom = await _context.Classrooms.FirstOrDefaultAsync(x => x.ClassroomId == classroomId && x.CreatedBy == userId && x.IsActive);
+            return classroom;
+        }
     }
 }

@@ -72,7 +72,14 @@ namespace LearningApp.Web.Modules.Classrooms
             return Ok(response);
         }
 
-
+        [Authorize(Roles = "AD, TR")]
+        [HttpPost("{classroomId}/topics/{topicId}")]
+        public async Task<IActionResult> AddTopicInClassroom(Guid classroomId, Guid topicId)
+        {
+            var userId = GetUserId();
+            var response = await _classroomService.AddTopicInClassroom(userId, classroomId, topicId);
+            return Ok(response);
+        }
 
 
     }

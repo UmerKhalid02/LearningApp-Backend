@@ -4,6 +4,7 @@ using LearningApp.Application.Enums;
 using LearningApp.Application.Wrappers;
 using LearningApp.Data.Entities.ClassroomEntity;
 using LearningApp.Data.IRepositories.IClassroomRepository;
+using LearningApp.Data.IRepositories.ITopicRepository;
 using LearningApp.Data.IRepositories.IUserRepository;
 
 namespace LearningApp.Web.Modules.Classrooms
@@ -15,11 +16,13 @@ namespace LearningApp.Web.Modules.Classrooms
 
         private readonly IUserRepository _userRepository;
         private readonly IClassroomRepository _classroomRepository;
+        private readonly ITopicRepository _topicRepository;
         private readonly IMapper _mapper;
-        public ClassroomService(IUserRepository userRepository, IClassroomRepository classroomRepository, IMapper mapper)
+        public ClassroomService(IUserRepository userRepository, IClassroomRepository classroomRepository, ITopicRepository topicRepository, IMapper mapper)
         {
             _userRepository = userRepository;
             _classroomRepository = classroomRepository;
+            _topicRepository = topicRepository;
             _mapper = mapper;
         }
 
@@ -67,7 +70,6 @@ namespace LearningApp.Web.Modules.Classrooms
             if (await _classroomRepository.GetClassroomByCode(code) != null) {
                 return false;
             }
-
             return true;
         }
 
@@ -144,6 +146,27 @@ namespace LearningApp.Web.Modules.Classrooms
 
             var response = _mapper.Map<List<ClassroomResponseDTO>>(classrooms);
             return new Response<List<ClassroomResponseDTO>>(true, response, GeneralMessages.RecordFetched);
+        }
+
+        public async Task<Response<bool>> AddTopicInClassroom(Guid userId, Guid classroomId, Guid topicId)
+        {
+            // check if classroom exist for that user
+            var classroom = await _classroomRepository.GetTeacherClassroomById(userId, classroomId);
+            if (classroom == null) {
+                throw new KeyNotFoundException(GeneralMessages.InvalidClassroomId);
+            }
+
+            // check if topic exists or not
+            var topic = await _topicRepository.GetTeacherTopicById(userId, topicId);
+            if (topic == null) {
+                throw new KeyNotFoundException(GeneralMessages.InvalidTopicId);
+            }
+
+            topic.ClassroomId = classroom.ClassroomId;
+            topic.Classroom = classroom;
+            await _topicRepository.SaveChanges();
+
+            return new Response<bool>(true, true, GeneralMessages.TopicAddedInClassroom);
         }
     }
 }

@@ -68,5 +68,11 @@ namespace LearningApp.Data.Repositories.TopicRepository
                 .Where(x => x.IsActive && x.CreatedBy == userId && x.TopicId == topicId).ToListAsync();
             return lessons;
         }
+
+        public Task<Topic?> GetTeacherTopicById(Guid userId, Guid topicId)
+        {
+            var topic = _context.Topics.FirstOrDefaultAsync(x => x.TopicId == topicId && x.CreatedBy == userId && x.IsActive);
+            return topic;
+        }
     }
 }

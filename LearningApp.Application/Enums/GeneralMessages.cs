@@ -50,5 +50,6 @@
 
 
         public const string InvalidClassroomId = "Invalid Classroom Id";
+        public const string TopicAddedInClassroom = "Topic successfully added in classroom";
     }
 }
