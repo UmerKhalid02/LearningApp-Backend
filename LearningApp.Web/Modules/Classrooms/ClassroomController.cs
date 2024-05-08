@@ -81,6 +81,15 @@ namespace LearningApp.Web.Modules.Classrooms
             return Ok(response);
         }
 
-
+        // join classroom using classcode
+        [Authorize(Roles = "AD, ST")]
+        [HttpPost("join")]
+        public async Task<IActionResult> JoinClassroom(JoinClassroomRequestDTO request)
+        {
+            var userId = GetUserId();
+            var userRole = GetUserRole();
+            var response = await _classroomService.JoinClassroom(userId, userRole, request);
+            return Ok(response);
+        }
     }
 }

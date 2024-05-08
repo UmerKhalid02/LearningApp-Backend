@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LearningApp.Application.DataTransferObjects.ClassroomDTO;
 using LearningApp.Application.Enums;
+using LearningApp.Application.Exceptions;
 using LearningApp.Application.Wrappers;
 using LearningApp.Data.Entities.ClassroomEntity;
 using LearningApp.Data.IRepositories.IClassroomRepository;
@@ -167,6 +168,37 @@ namespace LearningApp.Web.Modules.Classrooms
             await _topicRepository.SaveChanges();
 
             return new Response<bool>(true, true, GeneralMessages.TopicAddedInClassroom);
+        }
+
+        public async Task<Response<bool>> JoinClassroom(Guid userId, string userRole, JoinClassroomRequestDTO request)
+        {
+            if (userRole != "ST") {
+                throw new UnauthorizedAccessException(GeneralMessages.OnlyStudentsCanJoinClassroom);
+            }
+
+            var classroom = await _classroomRepository.GetClassroomByCode(request.ClassroomCode);
+            if (classroom == null) {
+                throw new BadRequestException(GeneralMessages.InvalidClassroomCode);
+            }
+
+            // check if user is already in the classroom or not
+            var userClassroom = await _classroomRepository.CheckStudentInClassroom(userId, classroom.ClassroomId);
+            if (userClassroom != null) {
+                throw new BadRequestException(GeneralMessages.UserAlreadyEnrolled);
+            }
+
+            userClassroom = new UserClassroom()
+            {
+                UserId = userId,
+                ClassroomId = classroom.ClassroomId,
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = userId
+            };
+            await _classroomRepository.AddUserInClassroom(userClassroom);
+            await _classroomRepository.SaveChangesAsync();
+
+            return new Response<bool>(true, true, GeneralMessages.UserEnrolled);
         }
     }
 }

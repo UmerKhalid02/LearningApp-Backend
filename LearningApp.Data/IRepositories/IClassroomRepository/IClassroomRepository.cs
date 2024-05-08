@@ -12,5 +12,7 @@ namespace LearningApp.Data.IRepositories.IClassroomRepository
         Task<List<Classroom>> GetAllStudentClassrooms(Guid userId);
         Task<List<Classroom>> GetAllTeacherClassrooms(Guid userId);
         Task<Classroom?> GetClassroomByCode(string code);
+        Task<UserClassroom?> CheckStudentInClassroom(Guid studentId, Guid classroomId);
+        Task<UserClassroom> AddUserInClassroom(UserClassroom userClassroom);
     }
 }
