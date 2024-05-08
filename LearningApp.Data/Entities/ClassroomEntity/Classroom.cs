@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LearningApp.Data.Entities.ProblemEntity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LearningApp.Data.Entities.ClassroomEntity
@@ -12,7 +13,9 @@ namespace LearningApp.Data.Entities.ClassroomEntity
 
         [Required]
         public string? ClassroomName { get; set; }
-
+        public string? ClassroomDescription { get; set; }
+        public string? ClassroomCode { get; set; }
         public ICollection<UserClassroom> UserClassrooms { get; set; }
+        public ICollection<Topic>? Topics { get; set; }
     }
 }

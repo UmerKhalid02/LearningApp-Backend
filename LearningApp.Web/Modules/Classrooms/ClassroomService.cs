@@ -10,6 +10,9 @@ namespace LearningApp.Web.Modules.Classrooms
 {
     public class ClassroomService : IClassroomService
     {
+        private const string allowedChars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        private static readonly Random Random = new Random();
+
         private readonly IUserRepository _userRepository;
         private readonly IClassroomRepository _classroomRepository;
         private readonly IMapper _mapper;
@@ -39,10 +42,40 @@ namespace LearningApp.Web.Modules.Classrooms
             return new Response<ClassroomResponseDTO>(true, response, GeneralMessages.RecordFetched);
         }
 
+        private async Task<string> GenerateUniqueCode()
+        {
+            string code;
+            bool codeUniqueness = false;
+            do
+            {
+                code = GenerateRandomCode();
+                codeUniqueness = await IsCodeUnique(code);
+            } while (!codeUniqueness);
+
+            return code;
+        }
+
+        private string GenerateRandomCode()
+        {
+            return new string(Enumerable.Repeat(allowedChars, 8)
+                .Select(s => s[Random.Next(s.Length)]).ToArray());
+        }
+
+        private async Task<bool> IsCodeUnique(string code)
+        {
+            // check if the generated code is already in use by some other classroom
+            if (await _classroomRepository.GetClassroomByCode(code) != null) {
+                return false;
+            }
+
+            return true;
+        }
+
         public async Task<Response<ClassroomResponseDTO>> AddClassroom(Guid userId, AddClassroomRequestDTO request)
         {
             var classroom = _mapper.Map<Classroom>(request);
 
+            classroom.ClassroomCode = await GenerateUniqueCode();
             classroom.IsActive = true;
             classroom.CreatedAt = DateTime.UtcNow;
             classroom.CreatedBy = userId;

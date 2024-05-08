@@ -61,7 +61,7 @@ namespace LearningApp.Web.Modules.Classrooms
             return Ok(response);
         }
 
-        // show all classrooms of specific user (teacher)
+        // show all classrooms of specific user (teacher/student)
         [Authorize(Roles = "AD, TR, ST")]
         [HttpGet("user")]
         public async Task<IActionResult> GetAllUserClassrooms()
@@ -71,6 +71,8 @@ namespace LearningApp.Web.Modules.Classrooms
             var response = await _classroomService.GetAllUserClassrooms(userId, userRole);
             return Ok(response);
         }
+
+
 
 
     }
