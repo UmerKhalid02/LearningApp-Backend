@@ -136,7 +136,7 @@ namespace LearningApp.Data.Repositories.AuthenticationRepository
             if (user == null)
                 return null;
             var userRole = await _context.UserRoles.Include(x => x.Role).FirstOrDefaultAsync(x => x.UserId == user.UserId && x.IsActive == true && x.DeletedAt == null);
-            var tokenDescriptor = GetTokenDescriptor(user, userRole.Role.RoleName, DateTime.UtcNow.AddSeconds(30));
+            var tokenDescriptor = GetTokenDescriptor(user, userRole.Role.RoleName, DateTime.UtcNow.AddMinutes(30));
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
