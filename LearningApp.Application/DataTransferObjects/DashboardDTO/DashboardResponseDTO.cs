@@ -10,6 +10,7 @@ namespace LearningApp.Application.DataTransferObjects.DashboardDTO
         public int? XP { get; set; }
         public double Multiplier { get; set; }
         public int Level { get; set; }
+        public int Performance { get; set; }
         public string? Role { get; set; }
     }
 }
