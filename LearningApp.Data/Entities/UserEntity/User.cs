@@ -26,6 +26,7 @@ namespace LearningApp.Data.Entities.UserEntity
         public double Multiplier { get; set; } = 1;
         [DefaultValue(1)]
         public int Level { get; set; } = 1;
+        public int Performance { get; set; }
         [Required]
         public virtual UserRole? UserRole { get; set; }
         public virtual ICollection<UserClassroom>? UserClassroom { get; set; }

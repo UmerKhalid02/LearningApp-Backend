@@ -46,6 +46,10 @@ namespace LearningApp.Web.Modules.Score
             if (user == null)
                 throw new UnauthorizedAccessException(GeneralMessages.UnauthorizedAccess);
 
+            // update user performance
+            user.Performance = request.Performance;
+            await _dashboardRepository.SaveChangesAsync();
+
             // check if user progress exists for the current lesson
             var progress = await _userProgressRepository.GetUserProgressForALesson(userId, lesson.LessonId);
             if (progress == null)
