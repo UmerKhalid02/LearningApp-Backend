@@ -1,4 +1,5 @@
 ﻿using LearningApp.Application.Wrappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Diagnostics;
@@ -7,10 +8,17 @@ using System.IO;
 namespace LearningApp.Web.Modules.Test
 {
     [ApiController]
-    [Route("api/v1/run-python-code")]
+    [Route("api/v1/")]
     public class Test : ControllerBase
     {
-        [HttpPost]
+        [AllowAnonymous]
+        [HttpGet("health")]
+        public IActionResult HealthCheck()
+        {
+            return Ok("server up and running");
+        }
+
+        [HttpPost("run-python-code")]
         public IActionResult RunPythonCode([FromBody] string code)
         {
             // "i=3\nwhile(i>0):\n\tprint(i)\n\ti=i-1"
