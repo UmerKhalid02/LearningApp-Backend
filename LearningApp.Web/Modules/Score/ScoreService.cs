@@ -5,6 +5,7 @@ using LearningApp.Data.Entities.ProblemEntity;
 using LearningApp.Data.Entities.UserEntity;
 using LearningApp.Data.IRepositories.IDashboardRepository;
 using LearningApp.Data.IRepositories.ILessonRepository;
+using LearningApp.Data.IRepositories.IRecentUserLessonsRepository;
 using LearningApp.Data.IRepositories.IUserProgressRepository;
 
 namespace LearningApp.Web.Modules.Score
@@ -12,13 +13,15 @@ namespace LearningApp.Web.Modules.Score
     public class ScoreService : IScoreService
     {
         private readonly IDashboardRepository _dashboardRepository;
+        private readonly IRecentUserLessonsRepository _recentUserLessonsRepository;
         private readonly ILessonRepository _lessonRepository;
         private readonly IUserProgressRepository _userProgressRepository;
-        public ScoreService(IDashboardRepository dashboardRepository, ILessonRepository lessonRepository, IUserProgressRepository userProgressRepository)
+        public ScoreService(IDashboardRepository dashboardRepository, ILessonRepository lessonRepository, IUserProgressRepository userProgressRepository, IRecentUserLessonsRepository recentUserLessonsRepository)
         {
             _dashboardRepository = dashboardRepository;
             _lessonRepository = lessonRepository;
             _userProgressRepository = userProgressRepository;
+            _recentUserLessonsRepository = recentUserLessonsRepository;
         }
 
         private async Task<bool> IsTopicCompleted(Guid userId, Lesson lesson)
@@ -99,6 +102,16 @@ namespace LearningApp.Web.Modules.Score
                     await _dashboardRepository.SaveChangesAsync();
                 }
             }
+
+            // add the lesson in recent lessons
+            RecentUserLessons recentUserLesson = new RecentUserLessons()
+            {
+                UserId = userId,
+                LessonId = lesson.LessonId,
+                DateCompleted = DateTime.UtcNow,
+                IsActive = true,
+            };
+            await _recentUserLessonsRepository.AddLessonInRecentLessons(recentUserLesson);
 
             CalculateScoreResponseDTO response = new()
             {

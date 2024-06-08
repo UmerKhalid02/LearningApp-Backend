@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LearningApp.Application.DataTransferObjects.DashboardDTO;
+using LearningApp.Data.Entities.ProblemEntity;
 using LearningApp.Data.Entities.UserEntity;
 
 namespace LearningApp.Web.Modules.Dashboard.Mapper
@@ -13,7 +14,11 @@ namespace LearningApp.Web.Modules.Dashboard.Mapper
 
         void DashboardDetailsMapper()
         { 
-            CreateMap<DashboardResponseDTO, User>().ReverseMap();
+            CreateMap<User, DashboardResponseDTO>()
+                .ForMember(dest => dest.recentLessons, opt => opt.Ignore())
+                .ReverseMap();
+
+            CreateMap<RecentLessonsDTO, Lesson>().ReverseMap();
         }
 
     }
