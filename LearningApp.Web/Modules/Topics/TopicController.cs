@@ -21,7 +21,8 @@ namespace LearningApp.Web.Modules.Topics
         [HttpGet("topics")]
         public async Task<IActionResult> GetAllTopics()
         {
-            var response = await _topicService.GetAllTopics();
+            var userId = this.GetUserId();
+            var response = await _topicService.GetAllTopics(userId);
             return Ok(response);
         }
 
@@ -29,7 +30,8 @@ namespace LearningApp.Web.Modules.Topics
         [HttpGet("topics/{topicId}")]
         public async Task<IActionResult> GetTopicById(Guid topicId)
         {
-            var response = await _topicService.GetTopicById(topicId);
+            var userId = this.GetUserId();
+            var response = await _topicService.GetTopicById(userId, topicId);
             return Ok(response);
         }
 
@@ -72,7 +74,7 @@ namespace LearningApp.Web.Modules.Topics
         [HttpGet("topics/users/{userId}")]
         public async Task<IActionResult> GetAllUserCreatedTopics(Guid userId)
         {
-            var response = await _topicService.GetAllTopics(userId);
+            var response = await _topicService.GetAllUserCreatedTopics(userId);
             return Ok(response);
         }
 

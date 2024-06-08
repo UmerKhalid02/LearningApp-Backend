@@ -20,17 +20,6 @@ namespace LearningApp.Web.Modules.Topics
             _mapper = mapper;
         }
 
-        public async Task<Response<List<TopicResponseDTO>>> GetAllTopics()
-        {
-            var topics = await _topicRepository.GetAllTopics();
-
-            if (topics == null)
-                return new Response<List<TopicResponseDTO>>(true, null, GeneralMessages.TopicsNotAdded);
-
-            var response = _mapper.Map<List<TopicResponseDTO>>(topics);
-            return new Response<List<TopicResponseDTO>>(true, response, GeneralMessages.RecordFetched);
-        }
-
         public async Task<Response<List<TopicResponseDTO>>> GetAllTopics(Guid userId)
         {
             var topics = await _topicRepository.GetAllTopics(userId);
@@ -39,17 +28,42 @@ namespace LearningApp.Web.Modules.Topics
                 return new Response<List<TopicResponseDTO>>(true, null, GeneralMessages.TopicsNotAdded);
 
             var response = _mapper.Map<List<TopicResponseDTO>>(topics);
+
+            // set completed lessons
+            foreach (var topic in response) {
+                foreach (var lesson in topic.Lessons) {
+                    lesson.IsCompleted = topics.Where(x => x.UserProgresses.Any(u => u.LessonId == lesson.LessonId && u.UserId == userId)).FirstOrDefault() != null ? true : false ;
+                }
+            }
+
             return new Response<List<TopicResponseDTO>>(true, response, GeneralMessages.RecordFetched);
         }
 
-        public async Task<Response<TopicResponseDTO>> GetTopicById(Guid topicId)
+        public async Task<Response<List<TopicResponseDTO>>> GetAllUserCreatedTopics(Guid userId)
         {
-            var topic = await _topicRepository.GetTopicById(topicId);
+            var topics = await _topicRepository.GetAllUserCreatedTopics(userId);
+
+            if (topics == null)
+                return new Response<List<TopicResponseDTO>>(true, null, GeneralMessages.TopicsNotAdded);
+
+            var response = _mapper.Map<List<TopicResponseDTO>>(topics);
+            return new Response<List<TopicResponseDTO>>(true, response, GeneralMessages.RecordFetched);
+        }
+
+        public async Task<Response<TopicResponseDTO>> GetTopicById(Guid userId, Guid topicId)
+        {
+            var topic = await _topicRepository.GetTopicById(userId, topicId);
 
             if (topic == null)
                 throw new KeyNotFoundException(GeneralMessages.RecordNotFound);
 
             var response = _mapper.Map<TopicResponseDTO>(topic);
+
+            // set completed lessons
+            foreach (var lesson in response.Lessons) {
+                lesson.IsCompleted = topic.UserProgresses.Any(u => u.LessonId == lesson.LessonId && u.UserId == userId) ? true : false;
+            }
+
             return new Response<TopicResponseDTO>(true, response, GeneralMessages.RecordFetched);
         }
 

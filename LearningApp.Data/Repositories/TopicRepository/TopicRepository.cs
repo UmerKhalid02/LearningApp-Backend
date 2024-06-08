@@ -12,15 +12,16 @@ namespace LearningApp.Data.Repositories.TopicRepository
             _context = context;
         }
 
-        public async Task<List<Topic>> GetAllTopics()
+        public async Task<List<Topic>> GetAllTopics(Guid userId)
         {
             var topics = await _context.Topics
                 .Include(x => x.Lessons.Where(l => l.IsActive))
+                .Include(x => x.UserProgresses.Where(u => u.UserId == userId && u.LessonId != null && u.IsActive))
                 .Where(x => x.IsActive).ToListAsync();
             return topics;
         }
 
-        public async Task<List<Topic>> GetAllTopics(Guid userId)
+        public async Task<List<Topic>> GetAllUserCreatedTopics(Guid userId)
         {
             var topics = await _context.Topics
                 .Include(x => x.Lessons.Where(l => l.IsActive))
@@ -32,6 +33,15 @@ namespace LearningApp.Data.Repositories.TopicRepository
         {
             var topic = await _context.Topics
                 .Include(x => x.Lessons.Where(l => l.IsActive))
+                .FirstOrDefaultAsync(x => x.TopicId == topicId && x.IsActive);
+            return topic;
+        }
+
+        public async Task<Topic> GetTopicById(Guid userId, Guid topicId)
+        {
+            var topic = await _context.Topics
+                .Include(x => x.Lessons.Where(l => l.IsActive))
+                .Include(x => x.UserProgresses.Where(u => u.TopicId == topicId && u.LessonId != null && u.UserId == userId && u.IsActive))
                 .FirstOrDefaultAsync(x => x.TopicId == topicId && x.IsActive);
             return topic;
         }
