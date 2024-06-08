@@ -9,7 +9,6 @@ namespace LearningApp.Data.Entities.UserEntity
     public class UserProgress : BaseEntity
     {
         [Key]
-        [ForeignKey("UserId")]
         public Guid UserProgressId { get; set; }
         
         [Column("UserID")]
@@ -22,7 +21,9 @@ namespace LearningApp.Data.Entities.UserEntity
         public virtual Lesson? Lesson { get; set; }
 
         [Column("TopicID")]
+        [ForeignKey("TopicId")]
         public virtual Guid TopicId { get; set; }
+        public virtual Topic Topic { get; set; }
 
         public bool TopicCompleted { get; set; }
     }

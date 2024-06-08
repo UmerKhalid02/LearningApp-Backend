@@ -12,5 +12,6 @@
         public Guid LessonId { get; set; }
         public int LessonNumber { get; set; }
         public string? LessonName { get; set; }
+        public bool IsCompleted { get; set; }
     }
 }
