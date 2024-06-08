@@ -12,5 +12,13 @@ namespace LearningApp.Application.DataTransferObjects.DashboardDTO
         public int Level { get; set; }
         public int Performance { get; set; }
         public string? Role { get; set; }
+        public List<RecentLessonsDTO>? recentLessons { get; set; }
+    }
+
+    public class  RecentLessonsDTO
+    {
+        public Guid LessonId { get; set; }
+        public int LessonNumber { get; set; }
+        public string? LessonName { get; set; }
     }
 }

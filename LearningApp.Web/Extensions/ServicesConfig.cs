@@ -4,6 +4,7 @@ using LearningApp.Data.IRepositories.IDashboardRepository;
 using LearningApp.Data.IRepositories.ILeaderboardRepository;
 using LearningApp.Data.IRepositories.ILessonRepository;
 using LearningApp.Data.IRepositories.IProblemRepository;
+using LearningApp.Data.IRepositories.IRecentUserLessonsRepository;
 using LearningApp.Data.IRepositories.ITopicRepository;
 using LearningApp.Data.IRepositories.IUserProgressRepository;
 using LearningApp.Data.IRepositories.IUserRepository;
@@ -13,6 +14,7 @@ using LearningApp.Data.Repositories.DashboardRepository;
 using LearningApp.Data.Repositories.LeaderboardRepository;
 using LearningApp.Data.Repositories.LessonRepository;
 using LearningApp.Data.Repositories.ProblemRepository;
+using LearningApp.Data.Repositories.RecentUserLessonsRepository;
 using LearningApp.Data.Repositories.TopicRepository;
 using LearningApp.Data.Repositories.UserProgressRepository;
 using LearningApp.Data.Repositories.UserRepository;
@@ -61,6 +63,7 @@ namespace LearningApp.Web.Extensions
             services.AddScoped<IClassroomService, ClassroomService>();
             services.AddScoped<IClassroomRepository, ClassroomRepository>();
 
+            services.AddScoped<IRecentUserLessonsRepository, RecentUserLessonsRepository>();
 
             return services;
         }

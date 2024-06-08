@@ -25,6 +25,7 @@ namespace LearningApp.Data
         public DbSet<UserProgress> UserProgress { get; set; }
         public DbSet<Classroom> Classrooms { get; set; }
         public DbSet<UserClassroom> UserClassrooms { get; set; }
+        public DbSet<RecentUserLessons> RecentUserLessons { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

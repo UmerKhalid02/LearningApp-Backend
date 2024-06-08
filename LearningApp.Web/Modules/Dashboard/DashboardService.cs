@@ -5,16 +5,19 @@ using LearningApp.Application.Wrappers;
 using LearningApp.Data.Entities;
 using LearningApp.Data.Entities.UserEntity;
 using LearningApp.Data.IRepositories.IDashboardRepository;
+using LearningApp.Data.IRepositories.IRecentUserLessonsRepository;
 
 namespace LearningApp.Web.Modules.Dashboard
 {
     public class DashboardService : IDashboardService
     {
         private readonly IDashboardRepository _dashboardRepository;
+        private readonly IRecentUserLessonsRepository _recentUserLessonsRepository;
         private readonly IMapper _mapper;
-        public DashboardService(IDashboardRepository dashboardRepository, IMapper mapper)
+        public DashboardService(IDashboardRepository dashboardRepository, IRecentUserLessonsRepository recentUserLessonsRepository, IMapper mapper)
         {
             _dashboardRepository = dashboardRepository;
+            _recentUserLessonsRepository = recentUserLessonsRepository;
             _mapper = mapper;
         }
 
@@ -55,8 +58,13 @@ namespace LearningApp.Web.Modules.Dashboard
                 await UserMultiplierHandler(userLoginTime.User, userLoginTime);
             }
 
+            // retreive recent lessons
+            var recentUserLessons = await _recentUserLessonsRepository.GetAllRecentUserLessons(userId);
+            var recentUserLessonsResponse = _mapper.Map<List<RecentLessonsDTO>>(recentUserLessons.Select(x => x.Lesson));
+
             DashboardResponseDTO responseDTO = _mapper.Map<DashboardResponseDTO>(user);
             responseDTO.Role = role;
+            responseDTO.recentLessons = recentUserLessonsResponse;
             
             return new Response<DashboardResponseDTO>(true, responseDTO, "Dashboard Response");
         }
