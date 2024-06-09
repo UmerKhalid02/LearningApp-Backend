@@ -76,6 +76,7 @@ namespace LearningApp.Web.Modules.Topics
 
             Topic newTopic = new()
             {
+                TopicId = Guid.NewGuid(),
                 TopicName = request.TopicName,
                 IsActive = true,
                 CreatedAt = DateTime.Now,
@@ -85,7 +86,9 @@ namespace LearningApp.Web.Modules.Topics
             await _topicRepository.CreateTopic(newTopic);
             await _topicRepository.SaveChanges();
 
-            return new Response<TopicResponseDTO>(true, null, GeneralMessages.RecordAdded);
+            var response = _mapper.Map<TopicResponseDTO>(newTopic);
+
+            return new Response<TopicResponseDTO>(true, response, GeneralMessages.RecordAdded);
         }
 
         public async Task<Response<TopicResponseDTO>> UpdateTopic(Guid topicId, TopicRequestDTO request, Guid userId)
