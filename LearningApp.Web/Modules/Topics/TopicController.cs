@@ -39,7 +39,8 @@ namespace LearningApp.Web.Modules.Topics
         [HttpGet("topics/{topicId}/lessons")]
         public async Task<IActionResult> GetAllLessonsByTopicId(Guid topicId)
         {
-            return Ok(await _lessonService.GetAllLessonsByTopicId(topicId));
+            var userId = this.GetUserId();
+            return Ok(await _lessonService.GetAllLessonsByTopicId(userId, topicId));
         }
 
         [Authorize(Roles = "AD, TR")]

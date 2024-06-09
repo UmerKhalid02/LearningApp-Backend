@@ -36,7 +36,7 @@ namespace LearningApp.Web.Modules.Lessons
             return new Response<List<LessonResponseDTO>>(true, response, GeneralMessages.RecordFetched);
         }
 
-        public async Task<Response<List<LessonResponseDTO>>> GetAllLessonsByTopicId(Guid topicId)
+        public async Task<Response<List<LessonResponseDTO>>> GetAllLessonsByTopicId(Guid userId, Guid topicId)
         {
             // check if that topic exists
             var topic = await _topicRepository.GetTopicById(topicId);
@@ -46,6 +46,12 @@ namespace LearningApp.Web.Modules.Lessons
 
             var lessons = await _lessonRepository.GetAllLessonsByTopicId(topicId);
             var response = _mapper.Map<List<LessonResponseDTO>>(lessons);
+
+            // set completed lessons
+            foreach (var lesson in response) {
+                lesson.IsCompleted = topic.UserProgresses.Any(x => x.LessonId == lesson.LessonId && x.UserId == userId && x.IsActive) ? true : false;
+            }
+
             return new Response<List<LessonResponseDTO>>(true, response, GeneralMessages.RecordFetched);
         }
 

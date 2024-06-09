@@ -36,7 +36,7 @@ namespace LearningApp.Data.Repositories.LessonRepository
         public async Task<List<Lesson>> GetAllLessonsByTopicId(Guid topicId)
         {
             var lessons = await _context.Lessons
-                .Include(x => x.Topic)
+                .Include(x => x.Topic).ThenInclude(t => t.UserProgresses)
                 .Include(x => x.Problems.Where(p => p.IsActive)).ThenInclude(p => p.Choices.Where(c => c.IsActive))
                 .Where(x => x.IsActive && x.TopicId == topicId).ToListAsync();
 

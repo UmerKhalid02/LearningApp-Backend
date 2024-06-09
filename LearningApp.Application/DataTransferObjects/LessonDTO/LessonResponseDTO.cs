@@ -7,6 +7,7 @@ namespace LearningApp.Application.DataTransferObjects.LessonDTO
         public Guid LessonId { get; set; }
         public int LessonNumber { get; set; }
         public string? LessonName { get; set; }
+        public bool IsCompleted { get; set; }
         public LessonTopicDTO Topic { get; set; }
         public List<LessonProblemsDTO> Problems { get; set; }
     }
