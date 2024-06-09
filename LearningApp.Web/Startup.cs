@@ -72,7 +72,8 @@ namespace LearningApp.Web
                 "http://localhost:5173",
                 "http://127.0.0.1:5500",
                 "http://127.0.0.1",
-                "http://localhost")
+                "http://localhost",
+                "https://fyp-web-frontend.vercel.app")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());
