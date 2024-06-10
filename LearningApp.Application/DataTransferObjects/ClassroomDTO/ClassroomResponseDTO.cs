@@ -1,4 +1,6 @@
-﻿namespace LearningApp.Application.DataTransferObjects.ClassroomDTO
+﻿using LearningApp.Application.DataTransferObjects.TopicDTO;
+
+namespace LearningApp.Application.DataTransferObjects.ClassroomDTO
 {
     public class ClassroomResponseDTO
     {
@@ -9,6 +11,7 @@
         public int TotalStudents { get; set; }
         public List<Student>? Students { get; set;}
         public Guid CreatedBy { get; set; }
+        public List<TopicResponseDTO>? Topics { get; set; }
     }
 
     public class Student

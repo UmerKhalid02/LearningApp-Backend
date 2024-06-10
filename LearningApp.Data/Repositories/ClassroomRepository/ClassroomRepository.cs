@@ -26,6 +26,7 @@ namespace LearningApp.Data.Repositories.ClassroomRepository
         {
             var classroom = await _context.Classrooms
                 .Include(x => x.UserClassrooms).ThenInclude(u => u.User)
+                .Include(x => x.Topics)
                 .FirstOrDefaultAsync(x => x.ClassroomId == classroomId && x.IsActive);
 
             return classroom;
@@ -46,6 +47,7 @@ namespace LearningApp.Data.Repositories.ClassroomRepository
         {
             var classrooms = await _context.Classrooms
                 .Include(x => x.UserClassrooms).ThenInclude(u => u.User)
+                .Include(x => x.Topics)
                 .Where(x => x.UserClassrooms.Any(u => u.UserId == userId))
                 .Where(x => x.IsActive)
                 .ToListAsync();
@@ -57,6 +59,7 @@ namespace LearningApp.Data.Repositories.ClassroomRepository
         {
             var classrooms = await _context.Classrooms
                 .Include(x => x.UserClassrooms).ThenInclude(u => u.User)
+                .Include(x => x.Topics)
                 .Where(x => x.CreatedBy == userId && x.IsActive)
                 .ToListAsync();
             

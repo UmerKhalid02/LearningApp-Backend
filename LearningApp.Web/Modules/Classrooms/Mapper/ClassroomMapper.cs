@@ -28,6 +28,7 @@ namespace LearningApp.Web.Modules.Classrooms.Mapper
             CreateMap<Classroom, ClassroomResponseDTO>()
                 .ForMember(dest => dest.TotalStudents, opt => opt.MapFrom(src => src.UserClassrooms.Count))
                 .ForMember(dest => dest.Students, opt => opt.MapFrom(src => src.UserClassrooms.Select(u => u.User)))
+                .ForMember(dest => dest.Topics, opt => opt.MapFrom(src => src.Topics))
                 .ReverseMap();
         }
 
