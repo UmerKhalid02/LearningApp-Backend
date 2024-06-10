@@ -163,7 +163,7 @@ namespace LearningApp.Web.Modules.Classrooms
                 throw new KeyNotFoundException(GeneralMessages.InvalidTopicId);
             }
 
-            classroom.Topics.Add(topic);
+            //classroom.Topics.Add(topic);
             topic.ClassroomId = classroom.ClassroomId;
             topic.Classroom = classroom;
             await _topicRepository.SaveChanges();
